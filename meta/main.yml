@@ -1,0 +1,28 @@
+---
+galaxy_info:
+  author: Daniel Gibbs
+  company: none
+  description: Setup ansible deployment user.
+  license: MIT
+  min_ansible_version: "2.10"
+  namespace: dgibbs64
+  role_name: first_contact
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+    - name: EL
+      versions:
+        - "7"
+        - "8"
+  galaxy_tags:
+    - system
+
+dependencies: []

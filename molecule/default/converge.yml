@@ -1,0 +1,8 @@
+---
+- name: converge
+  hosts: all
+  become: true
+  gather_facts: false
+
+  roles:
+    - role: ansible-role-first-contact

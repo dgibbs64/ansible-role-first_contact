@@ -1,0 +1,3 @@
+---
+#deploy_user: "deploy"
+connection_timeout: 1

@@ -1,0 +1,3 @@
+---
+ssh_key_location: "{{ lookup('ansible.builtin.env', 'HOME') }}/.ssh/id_ed25519.pub"
+deploy_user: "{{ ansible_user }}"

@@ -27,7 +27,7 @@
         timeout: "{{ connection_timeout }}"
       register: bootstrap_connect
 
-    - name: Configure "{{ deploy_user }}" user
+    - name: configure "{{ deploy_user }}" user
       remote_user: "root"
       block:
         - name: generate a random password
@@ -41,19 +41,19 @@
             password: "{{ deploy_password | password_hash('sha512') }}"
             update_password: on_create
 
-        - name: Ensure public EdDSA key for "{{ deploy_user }}" user is on node
+        - name: ensure public EdDSA key for "{{ deploy_user }}" user is on node
           ansible.posix.authorized_key:
             user: "{{ deploy_user }}"
             state: present
             key: "{{ lookup('file', '{{ ssh_key_location }}') }}"
 
-        - name: Ensure public EdDSA key for "root" user is on node
+        - name: ensure public EdDSA key for "root" user is on node
           ansible.posix.authorized_key:
             user: "root"
             state: present
             key: "{{ lookup('file', '{{ ssh_key_location }}') }}"
 
-        - name: Add user "{{ deploy_user }}" to sudo
+        - name: add user "{{ deploy_user }}" to sudo
           become: true
           ansible.builtin.lineinfile:
             path: /etc/sudoers.d/{{ deploy_user }}

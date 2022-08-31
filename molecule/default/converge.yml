@@ -5,4 +5,4 @@
   gather_facts: false
 
   roles:
-    - role: ansible-role-first-contact
+    - role: ansible-role-first_contact

@@ -9,7 +9,7 @@
 - name: ignore host key for {{ inventory_hostname }} on first run
   ansible.builtin.set_fact:
     ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
-  changed_when: true
+  changed_when: false
   when: has_entry_in_known_hosts_file.rc
 
 - name: prepare system

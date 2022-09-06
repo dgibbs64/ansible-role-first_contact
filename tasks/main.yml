@@ -37,19 +37,14 @@
         - name: ensure "{{ deploy_user }}" user exists
           ansible.builtin.user:
             name: "{{ deploy_user }}"
+            shell: /bin/bash
             create_home: true
             password: "{{ deploy_password | password_hash('sha512') }}"
             update_password: on_create
 
-        - name: ensure public EdDSA key for "{{ deploy_user }}" user is on node
+        - name: ensure ssh public key for "{{ deploy_user }}" user is on node
           ansible.posix.authorized_key:
             user: "{{ deploy_user }}"
-            state: present
-            key: "{{ lookup('file', '{{ ssh_key_location }}') }}"
-
-        - name: ensure public EdDSA key for "root" user is on node
-          ansible.posix.authorized_key:
-            user: "root"
             state: present
             key: "{{ lookup('file', '{{ ssh_key_location }}') }}"
 

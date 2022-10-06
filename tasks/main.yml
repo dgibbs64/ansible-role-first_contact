@@ -50,6 +50,14 @@
             user: "{{ deploy_user }}"
             state: present
             key: "{{ lookup('file', '{{ ansible_ssh_private_key_file }}.pub') }}"
+          when: ansible_ssh_private_key_file is defined
+
+        - name: "Ensure ssh public key for ansible deploy user is on node: {{ deploy_user }}"
+          ansible.posix.authorized_key:
+            user: "{{ deploy_user }}"
+            state: present
+            key: "{{ lookup('file', '{{ ssh_key_location }}') }}"
+          when: ssh_key_location is not defined or ssh_key_location is defined
 
         - name: "Add user ansible deploy user to sudo: {{ deploy_user }}"
           become: true

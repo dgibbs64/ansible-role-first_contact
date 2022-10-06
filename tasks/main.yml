@@ -1,43 +1,43 @@
 ---
-- name: Check host is known
+- name: "Check host is known"
   ansible.builtin.command: ssh-keygen -F {{ inventory_hostname }}
   register: has_entry_in_known_hosts_file
   changed_when: false
   ignore_errors: true
   delegate_to: 127.0.0.1
 
-- name: Ignore host key for on first run
+- name: "Ignore host key for on first run"
   ansible.builtin.set_fact:
     ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
   changed_when: false
   when: has_entry_in_known_hosts_file.rc
 
-- name: Prepare system
+- name: "Prepare system"
   block:
-    - name: test connection for {{ deploy_user }}
+    - name: "Test connection for ansible deploy user: {{ deploy_user }}"
       remote_user: "{{ deploy_user }}"
       ansible.builtin.wait_for_connection:
         timeout: "{{ connection_timeout }}"
 
   rescue:
-    - name: Test connection for root
+    - name: "Test connection for root"
       remote_user: "root"
       ansible.builtin.wait_for_connection:
         timeout: "{{ connection_timeout }}"
 
-    - name: Run robertdebock.bootstrap
+    - name: "Run robertdebock.bootstrap"
       remote_user: "root"
       ansible.builtin.import_role:
         name: robertdebock.bootstrap
 
-    - name: Configure "{{ deploy_user }}" user
+    - name: "Configure ansible deploy user: {{ deploy_user }}"
       remote_user: "root"
       block:
-        - name: generate a random password
+        - name: "Generate a random password"
           ansible.builtin.set_fact:
             deploy_password: "{{ lookup('password', '/dev/null length=16 chars=ascii_letters,digits') }}"
 
-        - name: ensure "{{ deploy_user }}" user exists
+        - name: "Ensure ansible deploy user exists: {{ deploy_user }}"
           ansible.builtin.user:
             name: "{{ deploy_user }}"
             shell: /bin/bash
@@ -45,13 +45,13 @@
             password: "{{ deploy_password | password_hash('sha512') }}"
             update_password: on_create
 
-        - name: Ensure ssh public key for "{{ deploy_user }}" user is on node
+        - name: "Ensure ssh public key for ansible deploy user is on node: {{ deploy_user }}"
           ansible.posix.authorized_key:
             user: "{{ deploy_user }}"
             state: present
             key: "{{ lookup('file', '{{ ansible_ssh_private_key_file }}.pub') }}"
 
-        - name: Add user "{{ deploy_user }}" to sudo
+        - name: "Add user ansible deploy user to sudo: {{ deploy_user }}"
           become: true
           ansible.builtin.lineinfile:
             path: /etc/sudoers.d/{{ deploy_user }}
@@ -61,7 +61,7 @@
             create: true
             validate: "visudo -cf %s"
 
-        - name: Set includedir in sudoers
+        - name: "Set includedir in sudoers"
           become: true
           ansible.builtin.lineinfile:
             dest: /etc/sudoers

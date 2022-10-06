@@ -1,18 +1,18 @@
 ---
-- name: check host is known
+- name: Check host is known
   ansible.builtin.command: ssh-keygen -F {{ inventory_hostname }}
   register: has_entry_in_known_hosts_file
   changed_when: false
   ignore_errors: true
   delegate_to: 127.0.0.1
 
-- name: ignore host key for on first run
+- name: Ignore host key for on first run
   ansible.builtin.set_fact:
     ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
   changed_when: false
   when: has_entry_in_known_hosts_file.rc
 
-- name: prepare system
+- name: Prepare system
   block:
     - name: test connection for {{ deploy_user }}
       remote_user: "{{ deploy_user }}"
@@ -20,17 +20,17 @@
         timeout: "{{ connection_timeout }}"
 
   rescue:
-    - name: test connection for root
+    - name: Test connection for root
       remote_user: "root"
       ansible.builtin.wait_for_connection:
         timeout: "{{ connection_timeout }}"
 
-    - name: robertdebock.bootstrap
+    - name: Run robertdebock.bootstrap
       remote_user: "root"
       ansible.builtin.import_role:
         name: robertdebock.bootstrap
 
-    - name: configure "{{ deploy_user }}" user
+    - name: Configure "{{ deploy_user }}" user
       remote_user: "root"
       block:
         - name: generate a random password
@@ -45,13 +45,13 @@
             password: "{{ deploy_password | password_hash('sha512') }}"
             update_password: on_create
 
-        - name: ensure ssh public key for "{{ deploy_user }}" user is on node
+        - name: Ensure ssh public key for "{{ deploy_user }}" user is on node
           ansible.posix.authorized_key:
             user: "{{ deploy_user }}"
             state: present
             key: "{{ lookup('file', '{{ ansible_ssh_private_key_file }}.pub') }}"
 
-        - name: add user "{{ deploy_user }}" to sudo
+        - name: Add user "{{ deploy_user }}" to sudo
           become: true
           ansible.builtin.lineinfile:
             path: /etc/sudoers.d/{{ deploy_user }}

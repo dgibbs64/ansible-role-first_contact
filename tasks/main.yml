@@ -15,6 +15,7 @@
 - name: prepare system
   block:
     - name: test connection for {{ deploy_user }}
+      remote_user: "{{ deploy_user }}"
       ansible.builtin.wait_for_connection:
         timeout: "{{ connection_timeout }}"
       register: bootstrap_connect
@@ -46,7 +47,7 @@
           ansible.posix.authorized_key:
             user: "{{ deploy_user }}"
             state: present
-            key: "{{ lookup('file', '{{ ssh_key_location }}') }}"
+            key: "{{ lookup('file', '{{ ansible_ssh_private_key_file }}.pub') }}"
 
         - name: add user "{{ deploy_user }}" to sudo
           become: true

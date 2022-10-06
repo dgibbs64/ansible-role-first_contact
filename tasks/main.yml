@@ -52,6 +52,11 @@
             key: "{{ lookup('file', '{{ ansible_ssh_private_key_file }}.pub') }}"
           when: ansible_ssh_private_key_file is defined
 
+        # display current user
+        - name: "Display current user"
+          ansible.builtin.shell: whoami
+          register: whoami
+
         - name: "Ensure ssh public key for ansible deploy user is on node: {{ deploy_user }}"
           ansible.posix.authorized_key:
             user: "{{ deploy_user }}"
@@ -60,7 +65,6 @@
           when: ssh_key_location is not defined or ssh_key_location is defined
 
         - name: "Add user ansible deploy user to sudo: {{ deploy_user }}"
-          become: true
           ansible.builtin.lineinfile:
             path: /etc/sudoers.d/{{ deploy_user }}
             line: "{{ deploy_user }} ALL=(ALL) NOPASSWD: ALL"
@@ -70,7 +74,6 @@
             validate: "visudo -cf %s"
 
         - name: "Set includedir in sudoers"
-          become: true
           ansible.builtin.lineinfile:
             dest: /etc/sudoers
             line: "#includedir /etc/sudoers.d"

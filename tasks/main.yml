@@ -1,12 +1,12 @@
 ---
-- name: check known_hosts for {{ inventory_hostname }}
+- name: check host is known
   ansible.builtin.command: ssh-keygen -F {{ inventory_hostname }}
   register: has_entry_in_known_hosts_file
   changed_when: false
   ignore_errors: true
   delegate_to: 127.0.0.1
 
-- name: ignore host key for {{ inventory_hostname }} on first run
+- name: ignore host key for on first run
   ansible.builtin.set_fact:
     ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
   changed_when: false
@@ -18,15 +18,17 @@
       remote_user: "{{ deploy_user }}"
       ansible.builtin.wait_for_connection:
         timeout: "{{ connection_timeout }}"
-      register: bootstrap_connect
-      changed_when: false
 
   rescue:
     - name: test connection for root
       remote_user: "root"
       ansible.builtin.wait_for_connection:
         timeout: "{{ connection_timeout }}"
-      register: bootstrap_connect
+
+    - name: robertdebock.bootstrap
+      remote_user: "root"
+      ansible.builtin.import_role:
+        name: robertdebock.bootstrap
 
     - name: configure "{{ deploy_user }}" user
       remote_user: "root"

@@ -6,4 +6,3 @@
 
   roles:
     - role: dgibbs64.generate_ssh_keys
-    - role: robertdebock.bootstrap

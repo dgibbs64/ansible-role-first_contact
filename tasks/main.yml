@@ -12,7 +12,7 @@
   changed_when: false
   when: has_entry_in_known_hosts_file.rc
 
-- name: "Prepare system"
+- name: "First contact"
   block:
     - name: "Test connection for ansible deploy user: {{ deploy_user }}"
       remote_user: "{{ deploy_user }}"

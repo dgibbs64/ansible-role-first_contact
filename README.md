@@ -17,9 +17,10 @@ None.
 
 ## Role Variables
 
-```
+```yaml
+---
 ssh_key_location: "~/.ssh/id_ed25519.pub"
-connection_timeout: 1
+connection_timeout: 3
 deploy_user: "deploy"
 ```
 
@@ -34,7 +35,6 @@ robertdebock.bootstrap
 - name: First Contact
   hosts: all
   roles:
-    - robertdebock.bootstrap
     - dgibbs64.first_contact
 ```
 

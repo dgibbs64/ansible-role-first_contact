@@ -12,3 +12,4 @@
         path: /root/.ssh/known_hosts
         state: touch
         mode: 0600
+      delegate_to: 127.0.0.1

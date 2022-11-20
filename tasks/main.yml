@@ -1,19 +1,20 @@
 ---
-- name: "Set deploy user"
+- name: "Set deploy_user"
   when: deploy_user is not defined
   block:
-    - name: "set deploy_user to current user"
-      command: whoami
+    - name: "Set deploy_user to current user"
+      ansible.builtin.command: whoami
       register: whoami
+      changed_when: false
       delegate_to: localhost
 
-    - name: "set facts"
-      set_fact:
+    - name: "Set deploy_user fact"
+      ansible.builtin.set_fact:
         deploy_user: "{{ whoami.stdout }}"
 
-    - name: debug deploy_user
-      ansible.builtin.debug:
-        msg: "{{ deploy_user }}"
+- name: "Display deploy_user"
+  ansible.builtin.debug:
+    msg: "deploy_user: {{ deploy_user }}"
 
 - name: "Bypass host key check"
   when: bypass_host_key_check

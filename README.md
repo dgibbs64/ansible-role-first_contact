@@ -1,6 +1,6 @@
 # first_contact
 
-An [Ansible](https://www.ansible.com) role that on first contact with a host will prepare it to be managed by ansible.
+An [Ansible](https://www.ansible.com) role that on first contact with a host will prepare it to be managed by Ansible.
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/4478206/202930662-130cf21e-8d0c-4b4d-a9af-682c61b0b62d.png" alt="Ansible First Contact"></a>

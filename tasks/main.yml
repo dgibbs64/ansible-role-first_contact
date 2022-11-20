@@ -1,4 +1,20 @@
 ---
+- name: "Set deploy user"
+  when: deploy_user is not defined
+  block:
+    - name: "set deploy_user to current user"
+      command: whoami
+      register: whoami
+      delegate_to: localhost
+
+    - name: "set facts"
+      set_fact:
+        deploy_user: "{{ whoami.stdout }}"
+
+    - name: debug deploy_user
+      ansible.builtin.debug:
+        msg: "{{ deploy_user }}"
+
 - name: "Bypass host key check"
   when: bypass_host_key_check
   block:

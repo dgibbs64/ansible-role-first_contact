@@ -2,3 +2,5 @@
 ssh_key_location: "~/.ssh/id_ed25519.pub"
 connection_timeout: 3
 deploy_user: "deploy"
+bypass_host_key_check: true
+bypass_host_identity_check: true

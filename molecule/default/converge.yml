@@ -3,6 +3,7 @@
   hosts: all
   become: true
   gather_facts: false
-
+  vars:
+    deploy_user: "deploy"
   roles:
     - role: ansible-role-first_contact

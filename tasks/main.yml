@@ -3,6 +3,7 @@
   when: deploy_user is not defined
   block:
     - name: "Set deploy_user to current user"
+      become: false
       ansible.builtin.command: whoami
       register: whoami
       changed_when: false

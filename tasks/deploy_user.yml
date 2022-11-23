@@ -1,0 +1,18 @@
+---
+- name: "Set deploy_user"
+  when: deploy_user is not defined
+  block:
+    - name: "Set deploy_user to current user"
+      become: false
+      ansible.builtin.command: whoami
+      register: whoami
+      changed_when: false
+      delegate_to: localhost
+
+    - name: "Set deploy_user fact"
+      ansible.builtin.set_fact:
+        deploy_user: "{{ whoami.stdout }}"
+
+    - name: "Display deploy_user"
+      ansible.builtin.debug:
+        msg: "deploy_user: {{ deploy_user }}"

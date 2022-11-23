@@ -1,0 +1,36 @@
+---
+- name: "Bypass host key check"
+  when: bypass_host_key_check
+  block:
+    - name: "Check if host is known"
+      ansible.builtin.command: 'ssh-keygen -F "{{ inventory_hostname }}"'
+      register: has_entry_in_known_hosts_file
+      changed_when: false
+      ignore_errors: true
+      delegate_to: localhost
+
+    - name: "Ignore StrictHostKeyChecking for on first run when host is not known"
+      ansible.builtin.set_fact:
+        ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+      changed_when: false
+      when: has_entry_in_known_hosts_file.rc
+
+- name: "Bypass host identification check"
+  when: bypass_host_identity_check
+  block:
+    - name: "Test remote host identification"
+      remote_user: "{{ deploy_user }}"
+      ansible.builtin.wait_for_connection:
+        timeout: "{{ connection_timeout }}"
+      register: connection_identity_test
+
+  rescue:
+    - name: "Remove host fingerprint from known hosts"
+      ansible.builtin.command: 'ssh-keygen -R "{{ inventory_hostname }}"'
+      when: connection_identity_test is search("REMOTE HOST IDENTIFICATION HAS CHANGED")
+      delegate_to: localhost
+
+    - name: "Ignore StrictHostKeyChecking"
+      ansible.builtin.set_fact:
+        ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+      changed_when: false

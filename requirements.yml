@@ -1,4 +1,4 @@
 ---
 roles:
   - src: robertdebock.bootstrap
-  - src: dgibbs64.generate_ssh_keys
+  - src: robertdebock.core_dependencies

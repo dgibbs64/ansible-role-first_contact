@@ -1,4 +1,8 @@
 ---
+#
+# Ansible managed
+#
+
 name: Ansible Molecule
 on:
   push:
@@ -18,28 +22,21 @@ jobs:
     needs:
       - lint
     runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
-      fail-fast: false
       matrix:
-        config:
-          #- image: "rockylinux"
-          #  tag: "latest"
-          #- image: "centos"
-          #  tag: "7"
-          #- image: "debian"
-          #  tag: "latest"
-          #- image: "debian"
-          #  tag: "bookworm"
-          #- image: "fedora"
-          #  tag: "latest"
-          #- image: "fedora"
-          #  tag: "rawhide"
-          - image: "ubuntu"
-            tag: "latest"
-          #- image: "ubuntu"
-          #  tag: "focal"
-          #- image: "ubuntu"
-          #  tag: "bionic"
+        image:
+          - ubuntu2204
+          - ubuntu2004
+          - rockylinux9
+          - rockylinux8
+          - centos7
+          - centos6
+          - debian11
+          - debian10
+          - debian9
+          - fedora36
+          - fedora35
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -48,5 +45,5 @@ jobs:
       - name: molecule
         uses: robertdebock/molecule-action@4.0.9
         with:
-          image: ${{ matrix.config.image }}
-          tag: ${{ matrix.config.tag }}
+          image: "${{ matrix.image }}"
+          options: parallel

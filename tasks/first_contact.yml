@@ -18,6 +18,7 @@
         python3_not_installed: true
 
 - name: "Test python"
+  when: python3_not_installed is defined
   block:
     - name: "Test python is installed"
       remote_user: "root"
@@ -30,14 +31,13 @@
         python_not_installed: true
 
 - name: "Bootstrap"
+  remote_user: "root"
   block:
     - name: "Bootstrap"
-      remote_user: "root"
       ansible.builtin.import_role:
         name: robertdebock.bootstrap
 
     - name: "Core dependencies"
-      remote_user: "root"
       ansible.builtin.import_role:
         name: robertdebock.core_dependencies
   when: python3_not_installed is defined and python_not_installed is defined
@@ -47,13 +47,11 @@
   ansible.builtin.setup:
 
 # If python3 is installed warm up the apt cache then bootstrap (package)
-- name: Apt update (Debian Family)
+- name: Warm apt cache (Debian Family)
   remote_user: "root"
   ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 3600
-    autoclean: true
-    autoremove: true
   when: ansible_os_family == "Debian"
 
 - name: "Bootstrap"

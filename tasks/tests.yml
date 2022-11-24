@@ -32,7 +32,7 @@
         python3_not_installed: true
 
 - name: "Test python"
-  when: first_contact_complete is not defined
+  when: first_contact_complete is not defined and python3_not_installed is defined
   block:
     - name: "Test python is installed"
       ansible.builtin.raw: "python --version"

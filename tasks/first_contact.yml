@@ -32,6 +32,7 @@
 
 - name: "Bootstrap"
   remote_user: "root"
+  when: python3_not_installed is defined and python_not_installed is defined
   block:
     - name: "Bootstrap"
       ansible.builtin.import_role:
@@ -40,7 +41,6 @@
     - name: "Core dependencies"
       ansible.builtin.import_role:
         name: robertdebock.core_dependencies
-  when: python3_not_installed is defined and python_not_installed is defined
 
 - name: "Gather facts"
   remote_user: "root"

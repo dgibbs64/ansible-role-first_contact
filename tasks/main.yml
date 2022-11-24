@@ -1,9 +1,9 @@
 ---
 - name: "Deploy user"
-  import_tasks: deploy_user.yml
+  ansible.builtin.import_tasks: deploy_user.yml
 
 - name: "SSH"
-  import_tasks: ssh.yml
+  ansible.builtin.import_tasks: ssh.yml
 
 - name: "Tests"
-  import_tasks: tests.yml
+  ansible.builtin.import_tasks: tests.yml

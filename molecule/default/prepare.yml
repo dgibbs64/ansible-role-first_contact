@@ -4,27 +4,24 @@
   gather_facts: false
   become: true
 
-  roles:
-    - role: dgibbs64.generate_ssh_keys
-
   pre_tasks:
     - name: "Create root home directory"
       delegate_to: localhost
-      file:
-        path: /root
+      ansible.builtin.file:
+        path: "${HOME}"
         state: directory
         mode: 0700
 
     - name: "Create root .ssh directory"
       delegate_to: localhost
-      file:
-        path: /root/.ssh
+      ansible.builtin.file:
+        path: "${HOME}/.ssh"
         state: directory
         mode: 0700
 
     - name: "Create known_hosts file"
       delegate_to: localhost
-      file:
-        path: /root/.ssh/known_hosts
+      ansible.builtin.file:
+        path: "${HOME}/.ssh/known_hosts"
         state: touch
         mode: 0600

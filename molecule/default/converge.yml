@@ -1,11 +1,9 @@
 ---
-- name: converge
+- name: "Converge"
   hosts: all
-  become: true
-  gather_facts: false
   vars:
     deploy_user: "deploy"
     bypass_host_identity_check: true
     bypass_host_key_check: true
   roles:
-    - role: ansible-role-first_contact
+    - role: "dgibbs64.first_contact"

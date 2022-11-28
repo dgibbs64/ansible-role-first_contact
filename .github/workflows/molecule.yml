@@ -1,49 +1,71 @@
 ---
-#
-# Ansible managed
-#
-
 name: Ansible Molecule
 on:
+  workflow_dispatch:
   push:
   pull_request:
   schedule:
-    - cron: "47 22 24 * *"
+    - cron: "16 0 * * 0"
 
 jobs:
   lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v3
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install test dependencies
+        run: pip3 install yamllint
+
+      - name: Yamllint
+        run: |
+          yamllint .
+
       - name: ansible-lint
         uses: ansible-community/ansible-lint-action@main
-  test:
+
+  molecule:
+    name: Molecule
     needs:
       - lint
     runs-on: ubuntu-latest
-    continue-on-error: true
     strategy:
+      fail-fast: false
       matrix:
-        image:
-          - ubuntu2204
-          - ubuntu2004
-          - rockylinux9
-          - rockylinux8
+        distro:
+          - amazonlinux2
           - centos7
-          - centos6
-          - debian11
           - debian10
+          - debian11
           - debian9
-          - fedora36
           - fedora35
+          - fedora36
+          - rockylinux8
+          - rockylinux9
+          - ubi8
+          - ubuntu1604
+          - ubuntu1804
+          - ubuntu2004
+          - ubuntu2204
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v3
-        with:
-          path: "${{ github.repository }}"
-      - name: molecule
-        uses: robertdebock/molecule-action@4.0.9
-        with:
-          image: "${{ matrix.image }}"
-          options: parallel
+
+      - name: Setup Python 3
+        uses: actions/setup-python@v4
+
+      - name: Install test dependencies
+        run: pip3 install ansible molecule[docker] docker yamllint ansible-lint
+
+      - name: Run Molecule tests
+        run: molecule test
+        env:
+          PY_COLORS: "1"
+          ANSIBLE_FORCE_COLOR: "1"
+          MOLECULE_IMAGE: "${{ matrix.distro }}"

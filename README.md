@@ -18,13 +18,14 @@ An [Ansible](https://www.ansible.com) role that on first contact with a host wil
 
 This role does the following on first contact.
 
-- Check if the ansible user exists
+- Check if the ansible user exists.
 - If not connect to the host as root.
   - create the ansible user (deploy_user).
   - add the ansible user to the sudoers group.
   - add the control node public key to the host ansible user.
   - set the ansible user's shell.
   - bootstrap the host using [robertdebock.bootstrap](https://galaxy.ansible.com/robertdebock/bootstrap).
+  - install ansible dependencies using [robertdebock.core_dependencies](https://galaxy.ansible.com/robertdebock/core_dependencies).
 
 > The ansible user (deploy_user) is the user that runs ansible commands on the host.
 

@@ -83,15 +83,15 @@
       ansible.posix.authorized_key:
         user: "{{ deploy_user }}"
         state: present
-        key: "{{ lookup('file', '{{ ansible_ssh_private_key_file }}.pub') }}"
-      when: ansible_ssh_private_key_file is defined
+        key: "{{ lookup('file', '{{ ssh_public_key_file }}') }}"
+      when: ssh_public_key_file is defined
 
-    - name: "Ensure SSH public key for ansible deploy user exists: {{ deploy_user }}"
+    - name: "Ensure SSH private key for ansible deploy user exists: {{ deploy_user }}"
       ansible.posix.authorized_key:
         user: "{{ deploy_user }}"
         state: present
-        key: "{{ lookup('file', '{{ ssh_key_location }}') }}"
-      when: ssh_key_location is not defined or ssh_key_location is defined
+        key: "{{ lookup('file', '{{ ssh_private_key_file }}') }}"
+      when: ssh_private_key_file is defined
 
     - name: "Ensure ansible deploy user is added to sudoers: {{ deploy_user }}"
       ansible.builtin.lineinfile:

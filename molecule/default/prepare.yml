@@ -4,7 +4,7 @@
   gather_facts: false
   become: true
 
-  pre_tasks:
+  tasks:
     - name: "Create root home directory"
       delegate_to: localhost
       ansible.builtin.file:

@@ -35,7 +35,7 @@ When creating a VPS using popular providers such as [Linode](https://www.linode.
 
 ## Requirements
 
-robertdebock.bootstrap
+None.
 
 ## Role Variables
 
@@ -53,7 +53,8 @@ ssh_key_location: "~/.ssh/id_ed25519.pub"
 > The below variables are SSH security related. It is important the implications of each are understood.
 
 From the SSH man page:
-_ssh automatically maintains and checks a database containing identification for all hosts it has ever been used with. Host keys are stored in ~/.ssh/known_hosts in the user's home directory. Additionally, the file /etc/ssh/ssh_known_hosts is automatically checked for known hosts. Any new hosts are automatically added to the user's file. If a host's identification ever changes, ssh warns about this and disables password authentication to prevent server spoofing or man-in-the-middle attacks, which could other‐wise be used to circumvent the encryption. The StrictHostKeyChecking option can be used to control logins to machines whose host key is not known or has changed._
+
+> ssh automatically maintains and checks a database containing identification for all hosts it has ever been used with. Host keys are stored in ~/.ssh/known_hosts in the user's home directory. Additionally, the file /etc/ssh/ssh_known_hosts is automatically checked for known hosts. Any new hosts are automatically added to the user's file. If a host's identification ever changes, ssh warns about this and disables password authentication to prevent server spoofing or man-in-the-middle attacks, which could other‐wise be used to circumvent the encryption. The StrictHostKeyChecking option can be used to control logins to machines whose host key is not known or has changed.
 
 If `bypass_host_key_check` is _true_ SSH [host key checking](https://docs.ansible.com/ansible/latest/user_guide/connection_details.html#managing-host-key-checking) will be bypassed for first contact only. Subsequent checks will be carried out as per `host_key_checking` [setting](https://docs.ansible.com/ansible/latest/user_guide/connection_details.html#managing-host-key-checking). This removes the requirement to manualy type yes to the below message.
 
@@ -83,7 +84,8 @@ Host key verification failed.
 
 ## Dependencies
 
-robertdebock.bootstrap
+- robertdebock.bootstrap
+- robertdebock.core_dependencies
 
 ## Example Playbook
 

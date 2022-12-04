@@ -45,8 +45,8 @@ bypass_host_identity_check: false
 bypass_host_key_check: true
 connection_timeout: 3
 deploy_user: "deploy"
-ssh_private_key_location: "~/.ssh/id_ed25519"
-ssh_public_key_location: "~/.ssh/id_ed25519.pub"
+ssh_private_key_file: "~/.ssh/id_ed25519"
+ssh_public_key_file: "~/.ssh/id_ed25519.pub"
 ```
 
 `deploy_user` is the user that ansible will use to log in to the host. Leave unset to use the user that is running ansible.

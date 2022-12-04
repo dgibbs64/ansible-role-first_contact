@@ -2,17 +2,16 @@
 - name: prepare
   hosts: all
   gather_facts: false
-  become: true
 
   tasks:
-    - name: "Create root home directory"
+    - name: "Create home directory"
       delegate_to: localhost
       ansible.builtin.file:
         path: "${HOME}"
         state: directory
         mode: 0700
 
-    - name: "Create root .ssh directory"
+    - name: "Create .ssh directory"
       delegate_to: localhost
       ansible.builtin.file:
         path: "${HOME}/.ssh"

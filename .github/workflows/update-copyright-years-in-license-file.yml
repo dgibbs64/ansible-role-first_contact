@@ -17,3 +17,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: LICENSE.md
+      - name: Merge pull request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge --merge --delete-branch

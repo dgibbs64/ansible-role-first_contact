@@ -9,29 +9,29 @@ An [Ansible](https://www.ansible.com) role that on first contact with a host wil
 </p>
 <p align="center">
 <a href="https://app.codacy.com/gh/dgibbs64/ansible-role-first_contact"><img src="https://img.shields.io/codacy/grade/1a892d499efd4dabb73beffa8d64ed01?logo=codacy&style=flat-square" alt="Codacy grade"></a>
-<a href="https://github.com/dgibbs64/ansible-role-first_contact/actions/workflows/molecule.yml"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/dgibbs64/ansible-role-first_contact/Ansible%20Molecule?label=molecule&logo=ansible&style=flat-square"></a>
+<a href="https://github.com/dgibbs64/ansible-role-first_contact/actions/workflows/molecule.yml"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/dgibbs64/ansible-role-first_contact/molecule.yml?label=molecule&logo=ansible&style=flat-square"></a>
 <a href="https://galaxy.ansible.com/dgibbs64/first_contact"><img alt="Ansible Quality Score" src="https://img.shields.io/ansible/quality/60605?logo=ansible&style=flat-square"></a>
 <a href="https://galaxy.ansible.com/dgibbs64/first_contact"><img alt="Ansible Role" src="https://img.shields.io/ansible/role/d/60605?color=EE0000&logo=ansible&style=flat-square"></a>
 <a href="https://galaxy.ansible.com/dgibbs64/first_contact"><img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/v/tag/dgibbs64/ansible-role-first_contact?color=EE0000&label=release&logo=ansible&style=flat-square"></a>
 <a href="/LICENSE.md"><img src="https://img.shields.io/github/license/gameservermanagers/docker-steamcmd?style=flat-square" alt="MIT License"></a>
 </p>
 
-This role does the following on first contact.
+This role is designed to perform the following actions upon initial contact with a host:
 
-- Check if the ansible user exists.
-- If not connect to the host as root.
-  - create the ansible user (deploy_user).
-  - add the ansible user to the sudoers group.
-  - add the control node public key to the host ansible user.
-  - set the ansible user's shell.
-  - bootstrap the host using [robertdebock.bootstrap](https://galaxy.ansible.com/robertdebock/bootstrap).
-  - install ansible dependencies using [robertdebock.core_dependencies](https://galaxy.ansible.com/robertdebock/core_dependencies).
+- Check if the Ansible user (deploy_user) already exists on the host.
+- If the ansible user does not exist, connect to the host as the root user.
+  - Create the ansible user on the host.
+  - Add the ansible user to the sudoers group, granting them superuser privileges.
+  - Add the public key of the control node to the ansible user's authorized keys, allowing them to log in without a password.
+  - Set the ansible user's shell to the desired shell program.
+  - Bootstrap the host using the [robertdebock.bootstrap](https://galaxy.ansible.com/robertdebock/bootstrap) role.
+  - Install necessary dependencies for Ansible using the [robertdebock.core_dependencies](https://galaxy.ansible.com/robertdebock/core_dependencies) role.
 
 > The ansible user (deploy_user) is the user that runs ansible commands on the host.
 
 ## Example Usage
 
-When creating a VPS using popular providers such as [Linode](https://www.linode.com/docs/products/tools/cloud-manager/guides/manage-ssh-keys/), [Digital Ocean](https://docs.digitalocean.com/products/droplets/how-to/add-ssh-keys/), [AWS](https://docs.aws.amazon.com/opsworks/latest/userguide/security-ssh-access.html), etc. you can normaly specify a public key to be added to the root user during installation. You can use this role to login using the root user to then create the ansible user.
+This role is typically used when creating a new virtual private server (VPS) with providers such as [Linode](https://www.linode.com/docs/products/tools/cloud-manager/guides/manage-ssh-keys/), [Digital Ocean](https://docs.digitalocean.com/products/droplets/how-to/add-ssh-keys/), [AWS](https://docs.aws.amazon.com/opsworks/latest/userguide/security-ssh-access.html).  During installation, you can normally specify a public key to be added to the root user. You can use this role to log in using the root user and then create the ansible user.
 
 ## Requirements
 

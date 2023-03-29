@@ -27,6 +27,7 @@
   rescue:
     - name: "Remove host fingerprint from known hosts"
       ansible.builtin.command: 'ssh-keygen -R "{{ inventory_hostname }}"'
+      changed_when: true
       when: connection_identity_test is search("REMOTE HOST IDENTIFICATION HAS CHANGED")
       delegate_to: localhost
 

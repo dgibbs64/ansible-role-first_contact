@@ -44,6 +44,7 @@
 
 - name: "Gather facts"
   remote_user: "root"
+  when: ansible_facts|default({}) == {}
   ansible.builtin.setup:
 
 # If python3 is installed warm up the apt cache then bootstrap (package)

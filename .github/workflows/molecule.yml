@@ -43,9 +43,10 @@ jobs:
           - centos7
           - debian10
           - debian11
-          - debian9
           - fedora35
           - fedora36
+          - fedora37
+          - fedora38
           - rockylinux8
           - rockylinux9
           - ubi8
@@ -61,7 +62,7 @@ jobs:
         uses: actions/setup-python@v4
 
       - name: Install test dependencies
-        run: pip3 install ansible molecule[docker] docker yamllint ansible-lint
+        run: pip3 install ansible molecule-plugins docker yamllint ansible-lint
 
       - name: Run Molecule tests
         run: molecule test

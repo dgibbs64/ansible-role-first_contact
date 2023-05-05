@@ -31,7 +31,7 @@ This role is designed to perform the following actions upon initial contact with
 
 ## Example Usage
 
-This role is typically used when creating a new virtual private server (VPS) with providers such as [Linode](https://www.linode.com/docs/products/tools/cloud-manager/guides/manage-ssh-keys/), [Digital Ocean](https://docs.digitalocean.com/products/droplets/how-to/add-ssh-keys/), [AWS](https://docs.aws.amazon.com/opsworks/latest/userguide/security-ssh-access.html).  During installation, you can normally specify a public key to be added to the root user. You can use this role to log in using the root user and then create the ansible user.
+This role is typically used when creating a new virtual private server (VPS) with providers such as [Linode](https://www.linode.com/docs/products/tools/cloud-manager/guides/manage-ssh-keys/), [Digital Ocean](https://docs.digitalocean.com/products/droplets/how-to/add-ssh-keys/), [AWS](https://docs.aws.amazon.com/opsworks/latest/userguide/security-ssh-access.html). During installation, you can normally specify a public key to be added to the root user. You can use this role to log in using the root user and then create the ansible user.
 
 ## Requirements
 
@@ -45,11 +45,14 @@ bypass_host_identity_check: false
 bypass_host_key_check: true
 connection_timeout: 3
 deploy_user: "deploy"
+deploy_password: "password"
 ssh_private_key_file: "~/.ssh/id_ed25519"
 ssh_public_key_file: "~/.ssh/id_ed25519.pub"
 ```
 
 `deploy_user` is the user that ansible will use to log in to the host. Leave unset to use the user that is running ansible.
+
+`deploy_password` is the password for the `deploy_user` account. Leave unset to generate a random password.
 
 > The below variables are SSH security related. It is important the implications of each are understood.
 

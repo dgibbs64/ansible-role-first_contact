@@ -6,21 +6,21 @@
     - name: "Check if connection still works"
       ansible.builtin.ping:
 
-    - name: "Set deploy_user to current user"
+    - name: "Set first_contact_deploy_user to current user"
       become: false
       ansible.builtin.command: whoami
-      register: whoami
+      register: first_contact_whoami
       changed_when: false
       delegate_to: localhost
 
-    - name: "Set deploy_user fact"
+    - name: "Set first_contact_deploy_user fact"
       ansible.builtin.set_fact:
-        deploy_user: "{{ whoami.stdout }}"
+        first_contact_deploy_user: "{{ first_contact_whoami.stdout }}"
 
-    - name: "Display deploy_user"
+    - name: "Display first_contact_deploy_user"
       ansible.builtin.debug:
-        msg: "deploy_user: {{ deploy_user }}"
+        msg: "first_contact_deploy_user: {{ first_contact_deploy_user }}"
 
-    - name: "Test connection for ansible deploy user: {{ deploy_user }}"
-      remote_user: "{{ deploy_user }}"
+    - name: "Test connection for ansible deploy user: {{ first_contact_deploy_user }}"
+      remote_user: "{{ first_contact_deploy_user }}"
       ansible.builtin.wait_for_connection:

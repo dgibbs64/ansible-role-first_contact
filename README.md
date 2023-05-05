@@ -18,7 +18,7 @@ An [Ansible](https://www.ansible.com) role that on first contact with a host wil
 
 This role is designed to perform the following actions upon initial contact with a host:
 
-- Check if the Ansible user (deploy_user) already exists on the host.
+- Check if the Ansible user (first_contact_deploy_user) already exists on the host.
 - If the ansible user does not exist, connect to the host as the root user.
   - Create the ansible user on the host.
   - Add the ansible user to the sudoers group, granting them superuser privileges.
@@ -27,7 +27,7 @@ This role is designed to perform the following actions upon initial contact with
   - Bootstrap the host using the [robertdebock.bootstrap](https://galaxy.ansible.com/robertdebock/bootstrap) role.
   - Install necessary dependencies for Ansible using the [robertdebock.core_dependencies](https://galaxy.ansible.com/robertdebock/core_dependencies) role.
 
-> The ansible user (deploy_user) is the user that runs ansible commands on the host.
+> The ansible user (first_contact_deploy_user) is the user that runs ansible commands on the host.
 
 ## Example Usage
 
@@ -41,18 +41,18 @@ None.
 
 ```yaml
 ---
-bypass_host_identity_check: false
-bypass_host_key_check: true
-connection_timeout: 3
-deploy_user: "deploy"
-deploy_password: "password"
-ssh_private_key_file: "~/.ssh/id_ed25519"
-ssh_public_key_file: "~/.ssh/id_ed25519.pub"
+first_contact_bypass_host_identity_check: false
+first_contact_bypass_host_key_check: true
+first_contact_connection_timeout: 3
+first_contact_deploy_user: "deploy"
+first_contact_deploy_password: "password"
+first_contact_ssh_private_key_file: "~/.ssh/id_ed25519"
+first_contact_ssh_public_key_file: "~/.ssh/id_ed25519.pub"
 ```
 
-`deploy_user` is the user that ansible will use to log in to the host. Leave unset to use the user that is running ansible.
+`first_contact_deploy_user` is the user that ansible will use to log in to the host. Leave unset to use the user that is running ansible.
 
-`deploy_password` is the password for the `deploy_user` account. Leave unset to generate a random password.
+`first_contact_deploy_password` is the password for the `first_contact_deploy_user` account. Leave unset to generate a random password.
 
 > The below variables are SSH security related. It is important the implications of each are understood.
 
@@ -60,7 +60,7 @@ From the SSH man page:
 
 > ssh automatically maintains and checks a database containing identification for all hosts it has ever been used with. Host keys are stored in ~/.ssh/known_hosts in the user's home directory. Additionally, the file /etc/ssh/ssh_known_hosts is automatically checked for known hosts. Any new hosts are automatically added to the user's file. If a host's identification ever changes, ssh warns about this and disables password authentication to prevent server spoofing or man-in-the-middle attacks, which could other‐wise be used to circumvent the encryption. The StrictHostKeyChecking option can be used to control logins to machines whose host key is not known or has changed.
 
-If `bypass_host_key_check` is _true_ SSH [host key checking](https://docs.ansible.com/ansible/latest/user_guide/connection_details.html#managing-host-key-checking) will be bypassed for first contact only. Subsequent checks will be carried out as per `host_key_checking` [setting](https://docs.ansible.com/ansible/latest/user_guide/connection_details.html#managing-host-key-checking). This removes the requirement to manualy type yes to the below message.
+If `first_contact_bypass_host_key_check` is _true_ SSH [host key checking](https://docs.ansible.com/ansible/latest/user_guide/connection_details.html#managing-host-key-checking) will be bypassed for first contact only. Subsequent checks will be carried out as per `host_key_checking` [setting](https://docs.ansible.com/ansible/latest/user_guide/connection_details.html#managing-host-key-checking). This removes the requirement to manualy type yes to the below message.
 
 ```bash
 The authenticity of host '192.168.1.1 (192.168.1.1)' can't be established.
@@ -68,7 +68,7 @@ ECDSA key fingerprint is SHA256:1RG/OFcYAVv57kcP784oaoeHcwjvHDAgtTFBckveoHE.
 Are you sure you want to continue connecting (yes/no/[fingerprint])?
 ```
 
-If `bypass_host_identity_check` is _true_ the below message will automatically be resolved. This is useful if your VPS is being rebuilt regularly. However you will no longer be protected by this ssh feature when running this role.
+If `first_contact_bypass_host_identity_check` is _true_ the below message will automatically be resolved. This is useful if your VPS is being rebuilt regularly. However you will no longer be protected by this ssh feature when running this role.
 
 ```bash
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

@@ -19,37 +19,5 @@
       ansible.builtin.set_fact:
         first_contact_complete: true
 
-- name: "Test python3"
-  when: first_contact_complete is not defined
-  block:
-    - name: "Test python3 is installed"
-      ansible.builtin.raw: "python3 --version"
-      changed_when: false
-
-  rescue:
-    - name: "Set python3_not_installed fact"
-      ansible.builtin.set_fact:
-        python3_not_installed: true
-
-- name: "Test python"
-  when: first_contact_complete is not defined and python3_not_installed is defined
-  block:
-    - name: "Test python is installed"
-      ansible.builtin.raw: "python --version"
-      changed_when: false
-
-  rescue:
-    - name: "Set python_not_installed fact"
-      ansible.builtin.set_fact:
-        python_not_installed: true
-
-- name: "Bootstrap"
-  when: python3_not_installed is defined and python_not_installed is defined
-  block:
-    - name: "Bootstrap"
-      ansible.builtin.import_role:
-        name: robertdebock.bootstrap
-
-    - name: "Core dependencies"
-      ansible.builtin.import_role:
-        name: robertdebock.core_dependencies
+- name: "Test Python"
+  ansible.builtin.import_tasks: python.yml

@@ -4,51 +4,15 @@
   ansible.builtin.wait_for_connection:
     timeout: "{{ connection_timeout }}"
 
-# If python3 is not installed then bootstrap (raw)
-- name: "Test python3"
-  remote_user: "root"
-  block:
-    - name: "Test python3 is installed"
-      ansible.builtin.raw: "python3 --version"
-      changed_when: false
-
-  rescue:
-    - name: "Set python3_not_installed fact"
-      ansible.builtin.set_fact:
-        python3_not_installed: true
-
-- name: "Test python"
-  when: python3_not_installed is defined
-  block:
-    - name: "Test python is installed"
-      remote_user: "root"
-      ansible.builtin.raw: "python --version"
-      changed_when: false
-
-  rescue:
-    - name: "Set python_not_installed fact"
-      ansible.builtin.set_fact:
-        python_not_installed: true
-
-- name: "Bootstrap"
-  remote_user: "root"
-  when: python3_not_installed is defined and python_not_installed is defined
-  block:
-    - name: "Bootstrap"
-      ansible.builtin.import_role:
-        name: robertdebock.bootstrap
-
-    - name: "Core dependencies"
-      ansible.builtin.import_role:
-        name: robertdebock.core_dependencies
+- name: "Test Python"
+  ansible.builtin.import_tasks: python.yml
 
 - name: "Gather facts"
   remote_user: "root"
   when: ansible_facts|default({}) == {}
   ansible.builtin.setup:
 
-# If python3 is installed warm up the apt cache then bootstrap (package)
-- name: Warm apt cache (Debian Family)
+- name: "Warm apt cache (Debian Family)"
   remote_user: "root"
   ansible.builtin.apt:
     update_cache: true

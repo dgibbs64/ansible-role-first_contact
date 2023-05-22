@@ -5,6 +5,7 @@
     timeout: "{{ first_contact_connection_timeout }}"
 
 - name: "Test Python"
+  remote_user: "root"
   ansible.builtin.import_tasks: python.yml
 
 - name: "Gather facts"

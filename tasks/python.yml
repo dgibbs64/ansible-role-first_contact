@@ -15,7 +15,6 @@
   when: python3_not_installed is defined
   block:
     - name: "Test python is installed"
-      remote_user: "root"
       ansible.builtin.raw: "python --version"
       changed_when: false
 
@@ -25,13 +24,14 @@
         python_not_installed: true
 
 - name: "Bootstrap"
-  remote_user: "root"
   when: python3_not_installed is defined and python_not_installed is defined
   block:
     - name: "Bootstrap"
+      become: true
       ansible.builtin.import_role:
         name: robertdebock.bootstrap
 
     - name: "Core dependencies"
+      become: true
       ansible.builtin.import_role:
         name: robertdebock.core_dependencies

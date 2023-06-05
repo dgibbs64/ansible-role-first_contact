@@ -93,7 +93,7 @@ Host key verification failed.
 If you are manually installing your server you may not have the ability to add a public key to the root user in install. When you login as a standard user you can use the following to allow ssh access to root and add your public key to the root user.
 
 ```bash
-sudo chmod 700 /root/.ssh; chmod 600 /root/.ssh/authorized_keys; sudo echo "<insert public key>" > /root/.ssh/authorized_keys; sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config; sudo systemctl restart sshd
+sudo mkdir -p /root/.ssh; chmod 700 /root/.ssh; touch /root/.ssh/authorized_keys; chmod 600 /root/.ssh/authorized_keys; sudo echo "<insert public key>" > /root/.ssh/authorized_keys; sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config; sudo systemctl restart sshd
 ```
 
 Once first contact has been established, you can disable root access again. By using the following or a role such as [geerlingguy.security](https://galaxy.ansible.com/geerlingguy/security) as part of your playbook.

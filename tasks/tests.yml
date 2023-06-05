@@ -10,7 +10,6 @@
       become: true
       ansible.builtin.raw: sudo --version
       changed_when: false
-
   rescue:
     - name: "First contact"
       ansible.builtin.import_tasks: first_contact.yml
@@ -25,7 +24,6 @@
     - name: "Test python3 is installed"
       ansible.builtin.raw: "python3 --version"
       changed_when: false
-
   rescue:
     - name: "Set python3_not_installed fact"
       ansible.builtin.set_fact:

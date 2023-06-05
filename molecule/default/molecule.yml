@@ -1,14 +1,10 @@
 ---
 dependency:
   name: galaxy
-lint: |
-  set -e
-  yamllint .
-  ansible-lint
 driver:
   name: docker
 platforms:
-  - name: "first_contact-${MOLECULE_IMAGE:-ubuntu2204}"
+  - name: "${MOLECULE_IMAGE:-ubuntu2204}"
     image: "geerlingguy/docker-${MOLECULE_IMAGE:-ubuntu2204}-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:

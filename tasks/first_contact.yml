@@ -11,7 +11,6 @@
     - name: "Test python3 is installed"
       ansible.builtin.raw: "python3 --version"
       changed_when: false
-
   rescue:
     - name: "Set python3_not_installed fact"
       ansible.builtin.set_fact:
@@ -24,7 +23,6 @@
       remote_user: "root"
       ansible.builtin.raw: "python --version"
       changed_when: false
-
   rescue:
     - name: "Set python_not_installed fact"
       ansible.builtin.set_fact:
@@ -44,8 +42,8 @@
 
 - name: "Gather facts"
   remote_user: "root"
-  when: ansible_facts|default({}) == {}
   ansible.builtin.setup:
+  when: ansible_facts|default({}) == {}
 
 # If python3 is installed warm up the apt cache then bootstrap (package)
 - name: Warm apt cache (Debian Family)

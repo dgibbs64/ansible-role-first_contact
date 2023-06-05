@@ -1,5 +1,5 @@
 ---
-- name: prepare
+- name: "Prepare"
   hosts: all
   gather_facts: false
 
@@ -27,7 +27,7 @@
 
     - name: "Generate ed25519 key"
       delegate_to: localhost
-      ansible.builtin.openssh_keypair:
+      community.crypto.openssh_keypair:
         path: "${HOME}/.ssh/id_ed25519"
         type: ed25519
         size: 4096

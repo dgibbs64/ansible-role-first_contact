@@ -1,4 +1,6 @@
 ---
+# defaults file for first_contact
+
 first_contact_bypass_host_identity_check: false
 first_contact_bypass_host_key_check: true
 first_contact_connection_timeout: 3

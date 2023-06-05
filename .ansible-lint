@@ -1,18 +1,6 @@
 ---
-#
-# Ansible managed
-#
 exclude_paths:
-  - ./meta/preferences.yml
-  - ./molecule/default/prepare.yml
-  - ./molecule/default/converge.yml
-  - ./molecule/default/verify.yml
-  - ./molecule/default/collections.yml
-  - ./.tox
-  - ./.cache
-  - ./.github
-  - ./requirements.yml
-  - ./github
+  - .github
 
 skip_list:
   - "403"

@@ -46,7 +46,7 @@
   when: ansible_facts|default({}) == {}
 
 # If python3 is installed warm up the apt cache then bootstrap (package)
-- name: Warm apt cache (Debian Family)
+- name: "Warm apt cache (Debian Family)"
   remote_user: "root"
   ansible.builtin.apt:
     update_cache: true

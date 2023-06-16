@@ -1,4 +1,6 @@
 ---
+collections:
+  - community.crypto
 roles:
   - src: robertdebock.bootstrap
   - src: robertdebock.core_dependencies

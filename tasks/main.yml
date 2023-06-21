@@ -1,7 +1,4 @@
 ---
-- name: "Ping host"
-  ansible.builtin.ping:
-
 - name: "Deploy user"
   ansible.builtin.include_tasks: deploy_user.yml
 

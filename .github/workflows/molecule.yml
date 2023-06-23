@@ -51,7 +51,6 @@ jobs:
           - debian10
           - debian11
           - debian12
-          - debian9
           - fedora36
           - fedora37
           - fedora38

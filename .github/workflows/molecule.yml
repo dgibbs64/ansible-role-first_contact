@@ -45,9 +45,7 @@ jobs:
       fail-fast: false
       matrix:
         distro:
-          - amazonlinux2
           - amazonlinux2023
-          - centos7
           - debian10
           - debian11
           - debian12
@@ -57,7 +55,6 @@ jobs:
           - rockylinux8
           - rockylinux9
           - ubi8
-          - ubuntu1604
           - ubuntu1804
           - ubuntu2004
           - ubuntu2204

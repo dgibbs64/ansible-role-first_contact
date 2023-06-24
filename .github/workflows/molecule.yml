@@ -31,12 +31,12 @@ jobs:
       - name: Install test dependencies
         run: pip3 install yamllint
 
-      - name: Yamllint
+      - name: Run Yamllint
         run: |
           yamllint .
 
-      - name: ansible-lint
-        uses: ansible-community/ansible-lint-action@main
+      - name: Run ansible-lint
+        uses: ansible/ansible-lint@main
 
   molecule:
     name: Molecule
@@ -75,7 +75,7 @@ jobs:
           secrets: "${{ toJSON(secrets) }}"
 
       - name: Run Molecule tests
-        run: molecule test
+        run: molecule test --all
         env:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"

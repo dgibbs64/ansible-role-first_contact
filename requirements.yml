@@ -1,6 +1,7 @@
 ---
 collections:
   - community.crypto
+  - ansible.posix
 roles:
   - src: robertdebock.bootstrap
   - src: robertdebock.core_dependencies

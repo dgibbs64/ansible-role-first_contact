@@ -3,10 +3,10 @@
   ansible.builtin.ping:
 
 - name: "Deploy user"
-  ansible.builtin.import_tasks: deploy_user.yml
+  ansible.builtin.include_tasks: deploy_user.yml
 
 - name: "SSH"
-  ansible.builtin.import_tasks: ssh.yml
+  ansible.builtin.include_tasks: ssh.yml
 
 - name: "Tests"
-  ansible.builtin.import_tasks: tests.yml
+  ansible.builtin.include_tasks: tests.yml

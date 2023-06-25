@@ -12,7 +12,7 @@
       changed_when: false
   rescue:
     - name: "First contact"
-      ansible.builtin.import_tasks: first_contact.yml
+      ansible.builtin.include_tasks: first_contact.yml
 
     - name: "Set fact first_contact_complete"
       ansible.builtin.set_fact:

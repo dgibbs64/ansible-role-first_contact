@@ -115,7 +115,7 @@
         path: /etc/sudoers.d/{{ first_contact_deploy_user }}
         line: "{{ first_contact_deploy_user }} ALL=(ALL) NOPASSWD: ALL"
         state: present
-        mode: 0440
+        mode: "0440"
         create: true
         validate: "visudo -cf %s"
 

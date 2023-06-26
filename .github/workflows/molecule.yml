@@ -4,10 +4,12 @@ on:
   workflow_dispatch:
   push:
     branches-ignore:
-      - repo-sync/**
+      - "repo-sync/**"
+      - "main"
+      - "master"
   pull_request:
     branches-ignore:
-      - repo-sync/**
+      - "repo-sync/**"
   schedule:
     - cron: "16 0 * * 0"
 
@@ -40,8 +42,7 @@ jobs:
 
   molecule:
     name: Molecule
-    needs:
-      - lint
+    needs: lint
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

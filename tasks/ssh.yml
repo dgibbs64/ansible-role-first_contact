@@ -28,8 +28,8 @@
     - name: "Remove host fingerprint from known hosts"
       ansible.builtin.command: 'ssh-keygen -R "{{ inventory_hostname }}"'
       changed_when: true
-      when: first_contact_connection_identity_test is search("REMOTE HOST IDENTIFICATION HAS CHANGED")
       delegate_to: localhost
+      when: first_contact_connection_identity_test is search("REMOTE HOST IDENTIFICATION HAS CHANGED")
 
     - name: "Ignore StrictHostKeyChecking"
       ansible.builtin.set_fact:

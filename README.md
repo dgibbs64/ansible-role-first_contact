@@ -16,6 +16,8 @@ An [Ansible](https://www.ansible.com) role that on first contact with a host wil
 <a href="https://github.com/dgibbs64/ansible-role-first_contact/blob/main/LICENSE.md"><img src="https://img.shields.io/github/license/gameservermanagers/docker-steamcmd?style=flat-square" alt="MIT License"></a>
 </p>
 
+## About
+
 This role is designed to perform the following actions upon initial contact with a host:
 
 - Check if the Ansible user (first_contact_deploy_user) already exists on the host.

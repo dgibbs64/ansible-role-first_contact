@@ -24,7 +24,7 @@ This role is designed to perform the following actions upon initial contact with
 - If the ansible user does not exist, connect to the host as the root user.
   - Create the ansible user on the host.
   - Add the ansible user to the sudoers group, granting them superuser privileges.
-  - Add the public key of the control node to the ansible user's authorized keys, allowing them to log in without a password.
+  - Add the public key of the control node to the ansible users' authorized keys, allowing the control node to log in without a password.
   - Set the ansible user's shell to the desired shell program.
   - Bootstrap the host using the [robertdebock.bootstrap](https://galaxy.ansible.com/robertdebock/bootstrap) role.
   - Install necessary dependencies for Ansible using the [robertdebock.core_dependencies](https://galaxy.ansible.com/robertdebock/core_dependencies) role.

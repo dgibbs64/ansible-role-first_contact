@@ -3,6 +3,8 @@ name: Ansible Galaxy
 on:
   workflow_dispatch:
   push:
+    paths:
+      - "README.md"
     tags:
       - "*"
 
@@ -16,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install test dependencies
         run: pip3 install yamllint
@@ -40,9 +42,9 @@ jobs:
           - debian10
           - debian11
           - debian12
-          - fedora36
           - fedora37
           - fedora38
+          - fedora39
           - opensuseleap15
           - rockylinux8
           - rockylinux9
@@ -51,13 +53,13 @@ jobs:
           - ubuntu2204
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install test dependencies
         run: pip3 install molecule-plugins[docker] jmespath
 
       - name: Secrets to env
-        uses: oNaiPs/secrets-to-env-action@v1
+        uses: oNaiPs/secrets-to-env-action@v1.5
         with:
           secrets: "${{ toJSON(secrets) }}"
 
@@ -74,7 +76,7 @@ jobs:
     needs: molecule
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Ansible
         run: pip3 install ansible-core

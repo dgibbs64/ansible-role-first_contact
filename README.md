@@ -112,9 +112,9 @@ sudo sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config; su
 ```yaml
 ---
 - name: First Contact
-hosts: all
-roles:
-- dgibbs64.first_contact
+  hosts: all
+  roles:
+    - dgibbs64.first_contact
 ```
 
 ## License

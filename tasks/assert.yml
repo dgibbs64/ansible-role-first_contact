@@ -1,0 +1,49 @@
+---
+- name: "Test if first_contact_bypass_host_identity_check is set correctly"
+  ansible.builtin.assert:
+    that:
+      - first_contact_bypass_host_identity_check is defined
+      - first_contact_bypass_host_identity_check is boolean
+    quiet: true
+
+- name: "Test if first_contact_bypass_host_key_check is set correctly"
+  ansible.builtin.assert:
+    that:
+      - first_contact_bypass_host_key_check is defined
+      - first_contact_bypass_host_key_check is boolean
+    quiet: true
+
+- name: "Test if first_contact_connection_timeout is set correctly"
+  ansible.builtin.assert:
+    that:
+      - first_contact_connection_timeout is defined
+      - first_contact_connection_timeout is integer
+    quiet: true
+
+- name: "Test if first_contact_deploy_user_shell is set correctly"
+  ansible.builtin.assert:
+    that:
+      - first_contact_deploy_user_shell is defined
+      - first_contact_deploy_user_shell is string
+    quiet: true
+
+- name: "Test if first_contact_ssh_private_key_file is set correctly"
+  ansible.builtin.assert:
+    that:
+      - first_contact_ssh_private_key_file is defined
+      - first_contact_ssh_private_key_file is string
+    quiet: true
+
+- name: "Test if first_contact_ssh_public_key_file is set correctly"
+  ansible.builtin.assert:
+    that:
+      - first_contact_ssh_public_key_file is defined
+      - first_contact_ssh_public_key_file is string
+    quiet: true
+
+- name: "Test if first_contact_ssh_password_authentication is set correctly"
+  ansible.builtin.assert:
+    that:
+      - first_contact_ssh_password_authentication is defined
+      - first_contact_ssh_password_authentication is string
+    quiet: true

@@ -1,4 +1,9 @@
 ---
+- name: "Assert"
+  ansible.builtin.import_tasks: assert.yml
+  run_once: true
+  delegate_to: localhost
+
 - name: "Deploy user"
   ansible.builtin.include_tasks: deploy_user.yml
 

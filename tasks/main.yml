@@ -12,3 +12,6 @@
 
 - name: "Tests"
   ansible.builtin.include_tasks: tests.yml
+
+- name: "SSH security"
+  ansible.builtin.include_tasks: ssh_security.yml

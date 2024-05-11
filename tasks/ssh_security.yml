@@ -1,0 +1,18 @@
+---
+- name: "Ensure SSH password authentication is disabled"
+  ansible.builtin.lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regexp: "^PasswordAuthentication"
+    line: "PasswordAuthentication no"
+    state: present
+    validate: "sshd -t -f %s"
+  when: first_contact_ssh_password_authentication is true
+
+- name: "Ensure SSH public key authentication is enabled"
+  ansible.builtin.lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regexp: "^PubkeyAuthentication"
+    line: "PubkeyAuthentication yes"
+    state: present
+    validate: "sshd -t -f %s"
+  when: first_contact_ssh_password_authentication is false

@@ -18,40 +18,17 @@
     - name: "First contact"
       ansible.builtin.include_tasks: first_contact.yml
 
-    - name: "Set fact first_contact_complete"
-      ansible.builtin.set_fact:
-        first_contact_complete: true
-
-- name: "Test python3"
-  when: first_contact_complete is not defined
+- name: "Test first_contact_deploy_user is accessible"
   block:
-    - name: "Test python3 is installed"
-      ansible.builtin.raw: "python3 --version"
-      changed_when: false
-  rescue:
-    - name: "Set python3_not_installed fact"
-      ansible.builtin.set_fact:
-        python3_not_installed: true
+    - name: "Test connection for ansible deploy user: {{ first_contact_deploy_user }}"
+      remote_user: "{{ first_contact_deploy_user }}"
+      ansible.builtin.wait_for_connection:
+        timeout: "{{ first_contact_connection_timeout }}"
 
-- name: "Test python"
-  when: first_contact_complete is not defined and python3_not_installed is defined
-  block:
-    - name: "Test python is installed"
-      ansible.builtin.raw: "python --version"
+    - name: "Test sudo access for ansible deploy: {{ first_contact_deploy_user }}"
+      become: true
+      ansible.builtin.raw: sudo --version
       changed_when: false
 
-  rescue:
-    - name: "Set python_not_installed fact"
-      ansible.builtin.set_fact:
-        python_not_installed: true
-
-- name: "Bootstrap"
-  when: python3_not_installed is defined and python_not_installed is defined
-  block:
-    - name: "Bootstrap"
-      ansible.builtin.import_role:
-        name: robertdebock.bootstrap
-
-    - name: "Core dependencies"
-      ansible.builtin.import_role:
-        name: robertdebock.core_dependencies
+    - name: "Root user"
+      ansible.builtin.import_tasks: root_user.yml

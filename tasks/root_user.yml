@@ -1,0 +1,41 @@
+---
+- name: "Generate a random password: root"
+  ansible.builtin.set_fact:
+    first_contact_root_password: "{{ lookup('password', '/dev/null length=16 chars=ascii_letters,digits') }}"
+  when: first_contact_root_password_update and first_contact_root_password is none or (first_contact_root_password | default('')) == ''
+
+- name: "Ensure correct first_contact_root_password is set: root"
+  ansible.builtin.user:
+    name: "root"
+    password: "{{ first_contact_root_password | password_hash('sha512') }}"
+    update_password: "{{ first_contact_root_password_update }}"
+  when: first_contact_root_password_update
+
+- name: "Ensure SSH is disabled for root"
+  ansible.builtin.lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin no"
+    state: present
+    validate: "sshd -t -f %s"
+  when: first_contact_root_ssh_disable
+
+- name: "Ensure root user login is disabled"
+  ansible.builtin.user:
+    name: "root"
+    shell: "/sbin/nologin"
+    state: present
+  when: first_contact_root_login_disable is true
+
+- name: "Ensure root user login is enabled"
+  ansible.builtin.user:
+    name: "root"
+    shell: "/bin/bash"
+    state: present
+  when: first_contact_root_login_disable is false
+
+- name: "Restart SSH service"
+  ansible.builtin.service:
+    name: sshd
+    state: restarted
+  when: first_contact_root_ssh_disable

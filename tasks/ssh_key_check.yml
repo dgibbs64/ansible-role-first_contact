@@ -1,0 +1,31 @@
+---
+- name: "Check local SSH public key for ansible deploy user exists: {{ first_contact_deploy_user }}"
+  ansible.builtin.stat:
+    path: "{{ first_contact_ssh_public_key_file }}"
+  register: ssh_public_key_file_stat
+  when: first_contact_ssh_public_key_file is defined and not first_contact_ssh_public_key_file | default('') == ''
+
+- name: "Check local SSH private key for ansible deploy user exists: {{ first_contact_deploy_user }}"
+  ansible.builtin.stat:
+    path: "{{ first_contact_ssh_private_key_file }}"
+  register: ssh_private_key_file_stat
+  when: first_contact_ssh_private_key_file is defined and not first_contact_ssh_private_key_file | default('') == ''
+
+- name: "Ensure local SSH public/private key has secure permissions: {{ first_contact_deploy_user }}"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    mode: "0600"
+  loop:
+    - "{{ first_contact_ssh_public_key_file }}"
+    - "{{ first_contact_ssh_private_key_file }}"
+  when: ssh_public_key_file_stat.stat.exists and ssh_private_key_file_stat.stat.exists
+
+- name: "Fail if local SSH public key for ansible deploy user does not exist: {{ first_contact_deploy_user }}"
+  ansible.builtin.fail:
+    msg: "Local SSH public key file does not exist: {{ first_contact_ssh_public_key_file }}"
+  when: first_contact_ssh_public_key_file is defined and not ssh_public_key_file_stat.stat.exists
+
+- name: "Fail if local SSH private key for ansible deploy user does not exist: {{ first_contact_deploy_user }}"
+  ansible.builtin.fail:
+    msg: "Local SSH private key file does not exist: {{ first_contact_ssh_private_key_file }}"
+  when: first_contact_ssh_private_key_file is defined and not ssh_private_key_file_stat.stat.exists

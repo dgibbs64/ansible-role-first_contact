@@ -57,7 +57,7 @@
 - name: "Bootstrap"
   ansible.builtin.import_role:
     name: robertdebock.bootstrap
-  when: ssh_key_copied is defined
+  when: ssh_key_copied is defined and ssh_key_copied.changed
 
 - name: "Core dependencies"
   ansible.builtin.import_role:

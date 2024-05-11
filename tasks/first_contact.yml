@@ -24,7 +24,6 @@
   remote_user: "root"
   block:
     - name: "SSH key check"
-      delegate_to: localhost
       ansible.builtin.include_tasks: ssh_key_check.yml
 
     - name: "Generate a random password: {{ first_contact_deploy_user }}"

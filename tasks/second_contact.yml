@@ -1,13 +1,7 @@
 ---
-# First contact is for hosts that require the deploy user setup.
-- name: "Test connection for root"
-  remote_user: "root"
-  ansible.builtin.wait_for_connection:
-    timeout: "{{ first_contact_connection_timeout }}"
-
+# Second contact is for hosts that have a deploy user that is already accessable with sudo.
 # If python3 is not installed then bootstrap (raw)
 - name: "Test python3"
-  remote_user: "root"
   block:
     - name: "Test python3 is installed"
       ansible.builtin.raw: "python3 --version"
@@ -21,7 +15,6 @@
   when: python3_not_installed is defined
   block:
     - name: "Test python is installed"
-      remote_user: "root"
       ansible.builtin.raw: "python --version"
       changed_when: false
   rescue:
@@ -30,7 +23,6 @@
         python_not_installed: true
 
 - name: "Bootstrap"
-  remote_user: "root"
   when: python3_not_installed is defined and python_not_installed is defined
   block:
     - name: "Bootstrap"
@@ -42,22 +34,10 @@
         name: robertdebock.core_dependencies
 
 - name: "Gathering facts"
-  remote_user: "root"
   ansible.builtin.setup:
   when: ansible_facts|default({}) == {}
 
-- name: "Bootstrap"
-  remote_user: "root"
-  ansible.builtin.import_role:
-    name: robertdebock.bootstrap
-
-- name: "Core dependencies"
-  remote_user: "root"
-  ansible.builtin.import_role:
-    name: robertdebock.core_dependencies
-
 - name: "Configure ansible deploy user: {{ first_contact_deploy_user }}"
-  remote_user: "root"
   block:
     - name: "Check local SSH public key for ansible deploy user exists: {{ first_contact_deploy_user }}"
       delegate_to: localhost
@@ -83,38 +63,20 @@
         msg: "SSH private key file does not exist: {{ first_contact_ssh_private_key_file }}"
       when: first_contact_ssh_private_key_file is defined and not ssh_private_key_file_stat.stat.exists
 
-    - name: "Generate a random password"
-      ansible.builtin.set_fact:
-        first_contact_deploy_password: "{{ lookup('password', '/dev/null length=16 chars=ascii_letters,digits') }}"
-      when: first_contact_deploy_password is not defined
-
-    - name: "Ensure ansible deploy user exists: {{ first_contact_deploy_user }}"
-      ansible.builtin.user:
-        name: "{{ first_contact_deploy_user }}"
-        shell: "{{ first_contact_deploy_user_shell }}"
-        create_home: true
-        password: "{{ first_contact_deploy_password | password_hash('sha512') }}"
-        update_password: on_create
-
     - name: "Ensure SSH public key is on host: {{ first_contact_deploy_user }}"
       ansible.posix.authorized_key:
         user: "{{ first_contact_deploy_user }}"
         state: present
         key: "{{ lookup('file', '{{ first_contact_ssh_public_key_file }}') }}"
+      register: ssh_key_result
       when: first_contact_ssh_public_key_file is defined
 
-    - name: "Ensure ansible deploy user is added to sudoers: {{ first_contact_deploy_user }}"
-      ansible.builtin.lineinfile:
-        path: /etc/sudoers.d/{{ first_contact_deploy_user }}
-        line: "{{ first_contact_deploy_user }} ALL=(ALL) NOPASSWD: ALL"
-        state: present
-        mode: "0440"
-        create: true
-        validate: "visudo -cf %s"
+- name: "Bootstrap"
+  ansible.builtin.import_role:
+    name: robertdebock.bootstrap
+  when: ssh_key_result is changed
 
-    - name: "Ensure sudoers.d is included in sudoers"
-      ansible.builtin.lineinfile:
-        dest: /etc/sudoers
-        line: "#includedir /etc/sudoers.d"
-        state: present
-        validate: "/usr/sbin/visudo -cf %s"
+- name: "Core dependencies"
+  ansible.builtin.import_role:
+    name: robertdebock.core_dependencies
+  when: ssh_key_result is changed

@@ -10,6 +10,11 @@
       become: true
       ansible.builtin.raw: sudo --version
       changed_when: false
+
+    - name: "Second contact"
+      become: true
+      ansible.builtin.include_tasks: second_contact.yml
+
   rescue:
     - name: "First contact"
       ansible.builtin.include_tasks: first_contact.yml

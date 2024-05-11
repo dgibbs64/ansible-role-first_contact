@@ -44,8 +44,11 @@ None.
 first_contact_bypass_host_identity_check: false
 first_contact_bypass_host_key_check: true
 first_contact_connection_timeout: 3
-first_contact_deploy_user: "deploy"
-first_contact_deploy_password: "password"
+first_contact_deploy_user_shell: "/bin/bash"
+first_contact_deploy_user:
+first_contact_deploy_password:
+first_contact_root_password:
+first_contact_ssh_password_authentication: "no"
 first_contact_ssh_private_key_file: "~/.ssh/id_ed25519"
 first_contact_ssh_public_key_file: "~/.ssh/id_ed25519.pub"
 ```
@@ -53,6 +56,8 @@ first_contact_ssh_public_key_file: "~/.ssh/id_ed25519.pub"
 `first_contact_deploy_user` is the user that ansible will use to log in to the host. Leave unset to use the user that is running ansible.
 
 `first_contact_deploy_password` is the password for the `first_contact_deploy_user` account. Leave unset to generate a random password.
+
+`first_contact_root_password` is the password for the root account. Leave unset to generate a random password.
 
 > The below variables are SSH security related. It is important the implications of each are understood.
 

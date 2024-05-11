@@ -71,12 +71,12 @@
       register: ssh_key_result
       when: first_contact_ssh_public_key_file is defined
 
-- name: "Bootstrap"
+- name: "Bootstrap" # noqa no-handler
   ansible.builtin.import_role:
     name: robertdebock.bootstrap
   when: ssh_key_result is changed
 
-- name: "Core dependencies"
+- name: "Core dependencies" # noqa no-handler
   ansible.builtin.import_role:
     name: robertdebock.core_dependencies
   when: ssh_key_result is changed

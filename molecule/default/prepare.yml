@@ -1,9 +1,30 @@
 ---
 - name: "Prepare"
   hosts: all
-  gather_facts: false
+  gather_facts: true
 
   tasks:
+    - name: "Install SSH (apt)"
+      ansible.builtin.apt:
+        name: "openssh-client,openssh-server"
+        state: present
+        update_cache: true
+      when: ansible_pkg_mgr == "apt"
+
+    - name: "Install SSH (dnf)"
+      ansible.builtin.dnf:
+        name: "openssh-clients,openssh-server"
+        state: present
+        update_cache: true
+      when: ansible_pkg_mgr == "dnf"
+
+    - name: "Install SSH (yum)"
+      ansible.builtin.yum:
+        name: "openssh-clients,openssh-server"
+        state: present
+        update_cache: true
+      when: ansible_pkg_mgr == "yum"
+
     - name: "Create home directory"
       delegate_to: localhost
       ansible.builtin.file:

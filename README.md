@@ -44,7 +44,7 @@ None.
 first_contact_bypass_host_identity_check: false
 first_contact_bypass_host_key_check: true
 first_contact_connection_timeout: 3
-first_contact_deploy_user_shell: "/bin/bash"
+first_contact_root_shell: "/bin/bash"
 first_contact_deploy_user:
 first_contact_deploy_password:
 first_contact_root_password:

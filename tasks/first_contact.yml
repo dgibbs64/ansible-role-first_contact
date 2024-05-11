@@ -64,29 +64,29 @@
       ansible.builtin.stat:
         path: "{{ first_contact_ssh_public_key_file }}"
       register: ssh_public_key_file_stat
-      when: first_contact_ssh_public_key_file is defined
+      when: first_contact_ssh_public_key_file is defined and not first_contact_ssh_public_key_file | default('') == ''
 
     - name: "Check local SSH private key for ansible deploy user exists: {{ first_contact_deploy_user }}"
       delegate_to: localhost
       ansible.builtin.stat:
         path: "{{ first_contact_ssh_private_key_file }}"
       register: ssh_private_key_file_stat
-      when: first_contact_ssh_private_key_file is defined
+      when: first_contact_ssh_private_key_file is defined and not first_contact_ssh_private_key_file | default('') == ''
 
-    - name: "Check local SSH public key for ansible deploy user exists: {{ first_contact_deploy_user }}"
+    - name: "Fail if local SSH public key for ansible deploy user does not exist: {{ first_contact_deploy_user }}"
       ansible.builtin.fail:
-        msg: "SSH public key file does not exist: {{ first_contact_ssh_public_key_file }}"
+        msg: "Local SSH public key file does not exist: {{ first_contact_ssh_public_key_file }}"
       when: first_contact_ssh_public_key_file is defined and not ssh_public_key_file_stat.stat.exists
 
-    - name: "Check SSH private key for ansible deploy user exists: {{ first_contact_deploy_user }}"
+    - name: "Fail if local SSH private key for ansible deploy user does not exist: {{ first_contact_deploy_user }}"
       ansible.builtin.fail:
-        msg: "SSH private key file does not exist: {{ first_contact_ssh_private_key_file }}"
+        msg: "Local SSH private key file does not exist: {{ first_contact_ssh_private_key_file }}"
       when: first_contact_ssh_private_key_file is defined and not ssh_private_key_file_stat.stat.exists
 
     - name: "Generate a random password"
       ansible.builtin.set_fact:
         first_contact_deploy_password: "{{ lookup('password', '/dev/null length=16 chars=ascii_letters,digits') }}"
-      when: first_contact_deploy_password is not defined
+      when: first_contact_deploy_password is none or (first_contact_deploy_password | default('')) == ''
 
     - name: "Ensure ansible deploy user exists: {{ first_contact_deploy_user }}"
       ansible.builtin.user:
@@ -101,7 +101,7 @@
         user: "{{ first_contact_deploy_user }}"
         state: present
         key: "{{ lookup('file', '{{ first_contact_ssh_public_key_file }}') }}"
-      when: first_contact_ssh_public_key_file is defined
+      when: first_contact_ssh_public_key_file is defined and not ssh_public_key_file_stat.stat.exists
 
     - name: "Ensure ansible deploy user is added to sudoers: {{ first_contact_deploy_user }}"
       ansible.builtin.lineinfile:

@@ -1,18 +1,18 @@
 ---
-- name: "Set first_contact_deploy_user"
-  when: first_contact_deploy_user | default('') | length == 0
-  block:
-    - name: "Set first_contact_deploy_user to current user"
-      become: false
-      ansible.builtin.command: whoami
-      register: whoami
-      changed_when: false
-      delegate_to: localhost
+- name: "Set first_contact_deploy_user to current user"
+  become: false
+  ansible.builtin.command: whoami
+  register: whoami
+  changed_when: false
+  delegate_to: localhost
+  when: first_contact_deploy_user is none or (first_contact_deploy_user | default('')) == ''
 
-    - name: "Set first_contact_deploy_user fact"
-      ansible.builtin.set_fact:
-        first_contact_deploy_user: "{{ whoami.stdout }}"
+- name: "Set first_contact_deploy_user fact"
+  ansible.builtin.set_fact:
+    first_contact_deploy_user: "{{ whoami.stdout }}"
+  when: whoami is defined and whoami.stdout is defined
 
-    - name: "Display first_contact_deploy_user"
-      ansible.builtin.debug:
-        msg: "first_contact_deploy_user: {{ first_contact_deploy_user }}"
+- name: "Display first_contact_deploy_user"
+  ansible.builtin.debug:
+    msg: "first_contact_deploy_user: {{ first_contact_deploy_user }}"
+  when: first_contact_deploy_user is defined and not (first_contact_deploy_user | default('')) == ''

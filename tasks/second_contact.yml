@@ -44,23 +44,23 @@
       ansible.builtin.stat:
         path: "{{ first_contact_ssh_public_key_file }}"
       register: ssh_public_key_file_stat
-      when: first_contact_ssh_public_key_file is defined
+      when: first_contact_ssh_public_key_file is defined and not first_contact_ssh_public_key_file | default('') == ''
 
     - name: "Check local SSH private key for ansible deploy user exists: {{ first_contact_deploy_user }}"
       delegate_to: localhost
       ansible.builtin.stat:
         path: "{{ first_contact_ssh_private_key_file }}"
       register: ssh_private_key_file_stat
-      when: first_contact_ssh_private_key_file is defined
+      when: first_contact_ssh_private_key_file is defined and not first_contact_ssh_private_key_file | default('') == ''
 
-    - name: "Check local SSH public key for ansible deploy user exists: {{ first_contact_deploy_user }}"
+    - name: "Fail if local SSH public key for ansible deploy user does not exist: {{ first_contact_deploy_user }}"
       ansible.builtin.fail:
-        msg: "SSH public key file does not exist: {{ first_contact_ssh_public_key_file }}"
+        msg: "Local SSH public key file does not exist: {{ first_contact_ssh_public_key_file }}"
       when: first_contact_ssh_public_key_file is defined and not ssh_public_key_file_stat.stat.exists
 
-    - name: "Check SSH private key for ansible deploy user exists: {{ first_contact_deploy_user }}"
+    - name: "Fail if local SSH private key for ansible deploy user does not exist: {{ first_contact_deploy_user }}"
       ansible.builtin.fail:
-        msg: "SSH private key file does not exist: {{ first_contact_ssh_private_key_file }}"
+        msg: "Local SSH private key file does not exist: {{ first_contact_ssh_private_key_file }}"
       when: first_contact_ssh_private_key_file is defined and not ssh_private_key_file_stat.stat.exists
 
     - name: "Ensure SSH public key is on host: {{ first_contact_deploy_user }}"
@@ -69,14 +69,14 @@
         state: present
         key: "{{ lookup('file', '{{ first_contact_ssh_public_key_file }}') }}"
       register: ssh_key_result
-      when: first_contact_ssh_public_key_file is defined
+      when: first_contact_ssh_public_key_file is defined and not ssh_public_key_file_stat.stat.exists
 
-- name: "Bootstrap" # noqa no-handler
+- name: "Bootstrap"
   ansible.builtin.import_role:
     name: robertdebock.bootstrap
-  when: ssh_key_result is changed
+  when: ssh_key_result is defined
 
-- name: "Core dependencies" # noqa no-handler
+- name: "Core dependencies"
   ansible.builtin.import_role:
     name: robertdebock.core_dependencies
-  when: ssh_key_result is changed
+  when: ssh_key_result is defined

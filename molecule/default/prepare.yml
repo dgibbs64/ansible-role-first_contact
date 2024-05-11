@@ -52,3 +52,9 @@
         path: "${HOME}/.ssh/id_ed25519"
         type: ed25519
         size: 4096
+
+    - name: "Start sshd service"
+      ansible.builtin.service:
+        name: sshd
+        state: started
+        enabled: true

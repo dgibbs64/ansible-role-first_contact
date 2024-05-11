@@ -44,11 +44,15 @@ None.
 first_contact_bypass_host_identity_check: false
 first_contact_bypass_host_key_check: true
 first_contact_connection_timeout: 3
-first_contact_root_shell: "/bin/bash"
 first_contact_deploy_user:
 first_contact_deploy_password:
+first_contact_deploy_password_update: "on_create"
+first_contact_root_ssh_disable: false
+first_contact_root_login_disable: false
 first_contact_root_password:
-first_contact_ssh_password_authentication: "no"
+first_contact_root_password_update: false
+first_contact_root_shell: "/bin/bash"
+first_contact_ssh_password_authentication: true
 first_contact_ssh_private_key_file: "~/.ssh/id_ed25519"
 first_contact_ssh_public_key_file: "~/.ssh/id_ed25519.pub"
 ```
@@ -57,7 +61,17 @@ first_contact_ssh_public_key_file: "~/.ssh/id_ed25519.pub"
 
 `first_contact_deploy_password` is the password for the `first_contact_deploy_user` account. Leave unset to generate a random password.
 
+`first_contact_deploy_password_update` is how the password for the `first_contact_deploy_user` account should be updated. Either only `on_create` or `always`
+
 `first_contact_root_password` is the password for the root account. Leave unset to generate a random password.
+
+`first_contact_root_password_update` is how the password for the root account should be updated. Either `true` or `false`
+
+`first_contact_root_ssh_disable` is a boolean that will disable the root user from logging in via SSH.
+
+`first_contact_root_login_disable` is a boolean that will disable the root user from logging in via the console.
+
+`first_contact_ssh_password_authentication` is a boolean that will disable password authentication for SSH.
 
 > The below variables are SSH security related. It is important the implications of each are understood.
 

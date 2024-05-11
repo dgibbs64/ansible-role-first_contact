@@ -25,6 +25,13 @@
         update_cache: true
       when: ansible_pkg_mgr == "yum"
 
+    - name: "Install SSH (zypper)"
+      community.general.zypper:
+        name: "openssh"
+        state: present
+        update_cache: true
+      when: ansible_pkg_mgr == "zypper"
+
     - name: "Create home directory"
       delegate_to: localhost
       ansible.builtin.file:
@@ -62,7 +69,7 @@
 
     - name: "Start sshd service"
       ansible.builtin.service:
-        name: sshd.socket
+        name: ssh.socket
         state: started
         enabled: true
       when: ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('24.04', '>=')

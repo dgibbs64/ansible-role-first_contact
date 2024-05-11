@@ -12,7 +12,6 @@
       changed_when: false
 
     - name: "Second contact"
-      become: true
       ansible.builtin.include_tasks: second_contact.yml
 
   rescue:

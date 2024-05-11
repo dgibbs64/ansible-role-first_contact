@@ -37,7 +37,6 @@
 - name: "Configure ansible deploy user: {{ first_contact_deploy_user }}"
   block:
     - name: "SSH key check"
-      delegate_to: localhost
       ansible.builtin.include_tasks: ssh_key_check.yml
 
     - name: "Ensure SSH public key is on host: {{ first_contact_deploy_user }}"

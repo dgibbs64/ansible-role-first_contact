@@ -1,6 +1,6 @@
 ---
 - name: "Set first_contact_deploy_user"
-  when: first_contact_deploy_user is not defined
+  when: first_contact_deploy_user | default('') | length == 0
   block:
     - name: "Set first_contact_deploy_user to current user"
       become: false

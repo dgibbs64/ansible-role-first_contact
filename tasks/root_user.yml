@@ -5,6 +5,7 @@
   when: first_contact_root_password_update and first_contact_root_password is none or (first_contact_root_password | default('')) == ''
 
 - name: "Ensure correct first_contact_root_password is set: root"
+  become: true
   ansible.builtin.user:
     name: "root"
     password: "{{ first_contact_root_password | password_hash('sha512') }}"
@@ -12,6 +13,7 @@
   when: first_contact_root_password_update
 
 - name: "Ensure SSH is disabled for root"
+  become: true
   ansible.builtin.lineinfile:
     path: "/etc/ssh/sshd_config"
     regexp: "^PermitRootLogin"
@@ -21,6 +23,7 @@
   when: first_contact_root_ssh_disable
 
 - name: "Ensure root user login is disabled"
+  become: true
   ansible.builtin.user:
     name: "root"
     shell: "/sbin/nologin"
@@ -28,6 +31,7 @@
   when: first_contact_root_login_disable is true
 
 - name: "Ensure root user login is enabled"
+  become: true
   ansible.builtin.user:
     name: "root"
     shell: "/bin/bash"
@@ -35,6 +39,7 @@
   when: first_contact_root_login_disable is false
 
 - name: "Restart SSH service"
+  become: true
   ansible.builtin.service:
     name: sshd
     state: restarted

@@ -1,5 +1,6 @@
 ---
 - name: "Ensure SSH password authentication is disabled"
+  become: true
   ansible.builtin.lineinfile:
     path: "/etc/ssh/sshd_config"
     regexp: "^PasswordAuthentication"
@@ -9,6 +10,7 @@
   when: first_contact_ssh_password_disable is true
 
 - name: "Ensure SSH public key authentication is enabled"
+  become: true
   ansible.builtin.lineinfile:
     path: "/etc/ssh/sshd_config"
     regexp: "^PubkeyAuthentication"

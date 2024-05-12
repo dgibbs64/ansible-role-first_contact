@@ -35,6 +35,7 @@
       ansible.builtin.user:
         name: "{{ first_contact_deploy_user }}"
         create_home: true
+        shell: "{{ first_contact_deploy_shell }}"
         password: "{{ first_contact_deploy_password | password_hash('sha512', first_contact_salt) }}"
         update_password: "{{ first_contact_deploy_password_update }}"
 
@@ -43,7 +44,7 @@
         user: "{{ first_contact_deploy_user }}"
         state: present
         key: "{{ lookup('file', '{{ first_contact_ssh_public_key_file }}') }}"
-      when: not ssh_public_key_file_stat.stat.exists
+      when: ssh_public_key_file_stat.stat.exists
 
     - name: "Ensure ansible deploy user is added to sudoers: {{ first_contact_deploy_user }}"
       ansible.builtin.lineinfile:

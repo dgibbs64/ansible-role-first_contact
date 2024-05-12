@@ -13,9 +13,8 @@
       ansible.builtin.set_fact:
         ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
       changed_when: false
-      run_once: true
       delegate_to: localhost
-      when: first_contact_has_entry_in_known_hosts_file.rc
+      when: first_contact_has_entry_in_known_hosts_file.rc != 0
 
 - name: "Bypass host identification check"
   when: first_contact_ssh_bypass_host_identity_check

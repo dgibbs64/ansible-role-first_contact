@@ -5,13 +5,15 @@
 first_contact_deploy_user:
 first_contact_deploy_password:
 first_contact_deploy_password_update: "on_create"
+first_contact_deploy_shell: "/bin/bash"
 
 # Root User Settings
-first_contact_root_ssh_disable: false
+first_contact_root_add_ssh_key: false
 first_contact_root_login_disable: false
-first_contact_root_password:
 first_contact_root_password_update: false
+first_contact_root_password:
 first_contact_root_shell: "/bin/bash"
+first_contact_root_ssh_disable: false
 
 # SSH local Connection Settings
 first_contact_ssh_bypass_host_identity_check: false

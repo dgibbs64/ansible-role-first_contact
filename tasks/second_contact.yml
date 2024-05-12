@@ -45,7 +45,7 @@
         state: present
         key: "{{ lookup('file', '{{ first_contact_ssh_public_key_file }}') }}"
       register: ssh_key_copied
-      when: not ssh_public_key_file_stat.stat.exists
+      when: ssh_public_key_file_stat.stat.exists
 
     - name: "Ensure correct first_contact_deploy_password is set: {{ first_contact_deploy_user }}"
       become: true

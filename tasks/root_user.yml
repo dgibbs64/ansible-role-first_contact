@@ -8,12 +8,22 @@
   become: true
   ansible.builtin.user:
     name: "root"
+    shell: "{{ first_contact_root_shell }}"
     password: "{{ first_contact_root_password | password_hash('sha512', first_contact_salt) }}"
     update_password: "always"
   notify:
     - "Restart sshd service"
     - "Restart sshd service (Ubuntu 24.04)"
   when: first_contact_root_password_update
+
+- name: "Ensure SSH public key is on host: root"
+  become: true
+  ansible.posix.authorized_key:
+    user: "root"
+    state: present
+    key: "{{ lookup('file', '{{ first_contact_ssh_public_key_file }}') }}"
+  register: ssh_key_copied
+  when: ssh_public_key_file_stat.stat.exists and first_contact_root_add_ssh_key is true
 
 - name: "Ensure SSH is disabled for root"
   become: true
@@ -43,7 +53,7 @@
   become: true
   ansible.builtin.user:
     name: "root"
-    shell: "/bin/bash"
+    shell: "{{ first_contact_root_shell }}"
     state: present
   notify:
     - "Restart sshd service"

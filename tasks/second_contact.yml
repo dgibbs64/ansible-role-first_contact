@@ -48,6 +48,7 @@
       when: not ssh_public_key_file_stat.stat.exists
 
     - name: "Ensure correct first_contact_deploy_password is set: {{ first_contact_deploy_user }}"
+      become: true
       ansible.builtin.user:
         name: "{{ first_contact_deploy_user }}"
         password: "{{ first_contact_deploy_password | password_hash('sha512') }}"

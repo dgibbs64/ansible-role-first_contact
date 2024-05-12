@@ -8,8 +8,11 @@
   become: true
   ansible.builtin.user:
     name: "root"
-    password: "{{ first_contact_root_password | password_hash('sha512') }}"
+    password: "{{ first_contact_root_password | password_hash('sha512', first_contact_salt) }}"
     update_password: "always"
+  notify:
+    - "Restart sshd service"
+    - "Restart sshd service (Ubuntu 24.04)"
   when: first_contact_root_password_update
 
 - name: "Ensure SSH is disabled for root"
@@ -20,6 +23,9 @@
     line: "PermitRootLogin no"
     state: present
     validate: "sshd -t -f %s"
+  notify:
+    - "Restart sshd service"
+    - "Restart sshd service (Ubuntu 24.04)"
   when: first_contact_root_ssh_disable
 
 - name: "Ensure root user login is disabled"
@@ -28,6 +34,9 @@
     name: "root"
     shell: "/sbin/nologin"
     state: present
+  notify:
+    - "Restart sshd service"
+    - "Restart sshd service (Ubuntu 24.04)"
   when: first_contact_root_login_disable is true
 
 - name: "Ensure root user login is enabled"
@@ -36,11 +45,7 @@
     name: "root"
     shell: "/bin/bash"
     state: present
+  notify:
+    - "Restart sshd service"
+    - "Restart sshd service (Ubuntu 24.04)"
   when: first_contact_root_login_disable is false
-
-- name: "Restart SSH service"
-  become: true
-  ansible.builtin.service:
-    name: sshd
-    state: restarted
-  when: first_contact_root_ssh_disable

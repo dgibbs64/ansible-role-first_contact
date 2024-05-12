@@ -1,6 +1,6 @@
 ---
 # First contact is for hosts that require the deploy user setup.
-- name: "Test connection for root"
+- name: "Test connection for root user"
   remote_user: "root"
   ansible.builtin.wait_for_connection:
     timeout: "{{ first_contact_ssh_connection_timeout }}"
@@ -35,7 +35,7 @@
       ansible.builtin.user:
         name: "{{ first_contact_deploy_user }}"
         create_home: true
-        password: "{{ first_contact_deploy_password | password_hash('sha512') }}"
+        password: "{{ first_contact_deploy_password | password_hash('sha512', first_contact_salt) }}"
         update_password: "{{ first_contact_deploy_password_update }}"
 
     - name: "Ensure SSH public key is on host: {{ first_contact_deploy_user }}"

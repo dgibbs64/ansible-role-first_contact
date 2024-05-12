@@ -1,0 +1,12 @@
+---
+- name: "Converge"
+  hosts: all
+  vars:
+    first_contact_root_ssh_disable: true
+    first_contact_root_login_disable: true
+    first_contact_root_password: test
+    first_contact_root_password_update: true
+    first_contact_root_shell: "/bin/bash"
+    first_contact_salt: "usersalt"
+  roles:
+    - role: "dgibbs64.first_contact"

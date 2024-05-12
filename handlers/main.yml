@@ -1,0 +1,12 @@
+---
+- name: "Restart sshd service"
+  ansible.builtin.service:
+    name: sshd
+    state: restarted
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('24.04', '<')
+
+- name: "Restart sshd service (Ubuntu 24.04)"
+  ansible.builtin.service:
+    name: ssh.socket
+    state: restarted
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('24.04', '>=')

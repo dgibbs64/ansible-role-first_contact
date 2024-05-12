@@ -24,3 +24,5 @@ first_contact_ssh_password_disable: false
 # SSH Key Settings
 first_contact_ssh_private_key_file: "~/.ssh/id_ed25519"
 first_contact_ssh_public_key_file: "~/.ssh/id_ed25519.pub"
+
+first_contact_salt: "usersalt"

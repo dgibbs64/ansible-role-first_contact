@@ -56,10 +56,12 @@
       when: first_contact_deploy_password_update == "always"
 
 - name: "Bootstrap"
+  become: true
   ansible.builtin.import_role:
     name: robertdebock.bootstrap
   when: ssh_key_copied is defined and ssh_key_copied.changed
 
 - name: "Core dependencies"
+  become: true
   ansible.builtin.import_role:
     name: robertdebock.core_dependencies

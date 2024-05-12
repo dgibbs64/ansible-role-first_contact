@@ -8,7 +8,7 @@
   ansible.builtin.user:
     name: "root"
     password: "{{ first_contact_root_password | password_hash('sha512') }}"
-    update_password: "{{ first_contact_root_password_update }}"
+    update_password: "always"
   when: first_contact_root_password_update
 
 - name: "Ensure SSH is disabled for root"

@@ -41,37 +41,53 @@ None.
 
 ```yaml
 ---
-first_contact_bypass_host_identity_check: false
-first_contact_bypass_host_key_check: true
-first_contact_connection_timeout: 3
+# Deploy User Settings
 first_contact_deploy_user:
 first_contact_deploy_password:
 first_contact_deploy_password_update: "on_create"
+
+# Root User Settings
 first_contact_root_ssh_disable: false
 first_contact_root_login_disable: false
 first_contact_root_password:
 first_contact_root_password_update: false
 first_contact_root_shell: "/bin/bash"
-first_contact_ssh_password_authentication: true
+
+# SSH local Connection Settings
+first_contact_ssh_bypass_host_identity_check: false
+first_contact_ssh_bypass_host_key_check: true
+first_contact_ssh_connection_timeout: 3
+
+# SSH Server Settings
+first_contact_ssh_password_disable: false
+
+# SSH Key Settings
 first_contact_ssh_private_key_file: "~/.ssh/id_ed25519"
 first_contact_ssh_public_key_file: "~/.ssh/id_ed25519.pub"
 ```
 
+### Deploy User Settings
+
 `first_contact_deploy_user` is the user that ansible will use to log in to the host. Leave unset to use the user that is running ansible.
-
 `first_contact_deploy_password` is the password for the `first_contact_deploy_user` account. Leave unset to generate a random password.
+`first_contact_deploy_password_update` is how the password for the `first_contact_deploy_user` account password should be updated. Either only `on_create` or `always`
 
-`first_contact_deploy_password_update` is how the password for the `first_contact_deploy_user` account should be updated. Either only `on_create` or `always`
+### Root User Settings
 
+`first_contact_root_password_update` if the password for the root account should be updated. Either `true` or `false`
 `first_contact_root_password` is the password for the root account. Leave unset to generate a random password.
+`first_contact_root_ssh_disable` if the the root user can log in via SSH.
+`first_contact_root_login_disable` if the the root user can log in via the console.
+`first_contact_root_shell` is the shell that the root user uses.
 
-`first_contact_root_password_update` is how the password for the root account should be updated. Either `true` or `false`
+### SSH Server Settings
 
-`first_contact_root_ssh_disable` is a boolean that will disable the root user from logging in via SSH.
+`first_contact_ssh_password_disable` if password authentication for SSH should be disabled. Either `true` or `false`
 
-`first_contact_root_login_disable` is a boolean that will disable the root user from logging in via the console.
+### SSH Key Settings
 
-`first_contact_ssh_password_authentication` is a boolean that will disable password authentication for SSH.
+`first_contact_ssh_private_key_file` is the path to the private key file.
+`first_contact_ssh_public_key_file` is the path to the public key file.
 
 > The below variables are SSH security related. It is important the implications of each are understood.
 
@@ -79,7 +95,7 @@ From the SSH man page:
 
 > ssh automatically maintains and checks a database containing identification for all hosts it has ever been used with. Host keys are stored in ~/.ssh/known_hosts in the user's home directory. Additionally, the file /etc/ssh/ssh_known_hosts is automatically checked for known hosts. Any new hosts are automatically added to the user's file. If a host's identification ever changes, ssh warns about this and disables password authentication to prevent server spoofing or man-in-the-middle attacks, which could other‐wise be used to circumvent the encryption. The StrictHostKeyChecking option can be used to control logins to machines whose host key is not known or has changed.
 
-If `first_contact_bypass_host_key_check` is _true_ SSH [host key checking](https://docs.ansible.com/ansible/latest/user_guide/connection_details.html#managing-host-key-checking) will be bypassed for first contact only. Subsequent checks will be carried out as per `host_key_checking` [setting](https://docs.ansible.com/ansible/latest/user_guide/connection_details.html#managing-host-key-checking). This removes the requirement to manualy type yes to the below message.
+If `first_contact_ssh_bypass_host_key_check` is _true_ SSH [host key checking](https://docs.ansible.com/ansible/latest/user_guide/connection_details.html#managing-host-key-checking) will be bypassed for first contact only. Subsequent checks will be carried out as per `host_key_checking` [setting](https://docs.ansible.com/ansible/latest/user_guide/connection_details.html#managing-host-key-checking). This removes the requirement to manualy type yes to the below message.
 
 ```bash
 The authenticity of host '192.168.1.1 (192.168.1.1)' can't be established.
@@ -87,7 +103,7 @@ ECDSA key fingerprint is SHA256:1RG/OFcYAVv57kcP784oaoeHcwjvHDAgtTFBckveoHE.
 Are you sure you want to continue connecting (yes/no/[fingerprint])?
 ```
 
-If `first_contact_bypass_host_identity_check` is _true_ the below message will automatically be resolved. This is useful if your VPS is being rebuilt regularly. However you will no longer be protected by this ssh feature when running this role.
+If `first_contact_ssh_bypass_host_identity_check` is _true_ the below message will automatically be resolved. This is useful if your VPS is being rebuilt regularly. However you will no longer be protected by this ssh feature when running this role.
 
 ```bash
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

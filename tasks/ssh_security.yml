@@ -6,7 +6,7 @@
     line: "PasswordAuthentication no"
     state: present
     validate: "sshd -t -f %s"
-  when: first_contact_ssh_password_authentication is true
+  when: first_contact_ssh_password_disable is true
 
 - name: "Ensure SSH public key authentication is enabled"
   ansible.builtin.lineinfile:
@@ -15,4 +15,4 @@
     line: "PubkeyAuthentication yes"
     state: present
     validate: "sshd -t -f %s"
-  when: first_contact_ssh_password_authentication is false
+  when: first_contact_ssh_password_disable is false

@@ -3,7 +3,7 @@
 - name: "Test connection for root"
   remote_user: "root"
   ansible.builtin.wait_for_connection:
-    timeout: "{{ first_contact_connection_timeout }}"
+    timeout: "{{ first_contact_ssh_connection_timeout }}"
 
 - name: "Bootstrap"
   remote_user: "root"

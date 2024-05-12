@@ -2,7 +2,7 @@
 - name: "Converge"
   hosts: all
   vars:
-    first_contact_bypass_host_identity_check: true
-    first_contact_bypass_host_key_check: true
+    first_contact_ssh_bypass_host_identity_check: true
+    first_contact_ssh_bypass_host_key_check: true
   roles:
     - role: "dgibbs64.first_contact"

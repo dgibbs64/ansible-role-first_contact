@@ -4,7 +4,7 @@
     - name: "Test connection for ansible deploy user: {{ first_contact_deploy_user }}"
       remote_user: "{{ first_contact_deploy_user }}"
       ansible.builtin.wait_for_connection:
-        timeout: "{{ first_contact_connection_timeout }}"
+        timeout: "{{ first_contact_ssh_connection_timeout }}"
 
     - name: "Test sudo access for ansible deploy: {{ first_contact_deploy_user }}"
       become: true
@@ -23,7 +23,7 @@
     - name: "Test connection for ansible deploy user: {{ first_contact_deploy_user }}"
       remote_user: "{{ first_contact_deploy_user }}"
       ansible.builtin.wait_for_connection:
-        timeout: "{{ first_contact_connection_timeout }}"
+        timeout: "{{ first_contact_ssh_connection_timeout }}"
 
     - name: "Test sudo access for ansible deploy: {{ first_contact_deploy_user }}"
       become: true

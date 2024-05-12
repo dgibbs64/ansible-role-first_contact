@@ -1,17 +1,26 @@
 ---
 # defaults file for first_contact
 
-first_contact_bypass_host_identity_check: false
-first_contact_bypass_host_key_check: true
-first_contact_connection_timeout: 3
+# Deploy User Settings
 first_contact_deploy_user:
 first_contact_deploy_password:
 first_contact_deploy_password_update: "on_create"
+
+# Root User Settings
 first_contact_root_ssh_disable: false
 first_contact_root_login_disable: false
 first_contact_root_password:
 first_contact_root_password_update: false
 first_contact_root_shell: "/bin/bash"
-first_contact_ssh_password_authentication: true
+
+# SSH local Connection Settings
+first_contact_ssh_bypass_host_identity_check: false
+first_contact_ssh_bypass_host_key_check: true
+first_contact_ssh_connection_timeout: 3
+
+# SSH Server Settings
+first_contact_ssh_password_disable: false
+
+# SSH Key Settings
 first_contact_ssh_private_key_file: "~/.ssh/id_ed25519"
 first_contact_ssh_public_key_file: "~/.ssh/id_ed25519.pub"

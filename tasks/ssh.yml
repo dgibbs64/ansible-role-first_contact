@@ -1,6 +1,6 @@
 ---
 - name: "Bypass host key check"
-  when: first_contact_bypass_host_key_check
+  when: first_contact_ssh_bypass_host_key_check
   block:
     - name: "Check if host is known"
       ansible.builtin.command: 'ssh-keygen -F "{{ inventory_hostname }}"'
@@ -18,12 +18,12 @@
       when: first_contact_has_entry_in_known_hosts_file.rc
 
 - name: "Bypass host identification check"
-  when: first_contact_bypass_host_identity_check
+  when: first_contact_ssh_bypass_host_identity_check
   block:
     - name: "Test remote host identification"
       remote_user: "{{ first_contact_deploy_user }}"
       ansible.builtin.wait_for_connection:
-        timeout: "{{ first_contact_connection_timeout }}"
+        timeout: "{{ first_contact_ssh_connection_timeout }}"
       register: first_contact_connection_identity_test
 
   rescue:

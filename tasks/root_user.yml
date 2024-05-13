@@ -8,7 +8,6 @@
   become: true
   ansible.builtin.user:
     name: "root"
-    shell: "{{ first_contact_root_shell }}"
     password: "{{ first_contact_root_password | password_hash('sha512', first_contact_salt) }}"
     update_password: "always"
   notify:

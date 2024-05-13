@@ -39,14 +39,6 @@
     - name: "SSH key check"
       ansible.builtin.include_tasks: ssh_key_check.yml
 
-    - name: "Ensure SSH public key is on host: {{ first_contact_deploy_user }}"
-      ansible.posix.authorized_key:
-        user: "{{ first_contact_deploy_user }}"
-        state: present
-        key: "{{ lookup('file', '{{ first_contact_ssh_public_key_file }}') }}"
-      register: ssh_key_copied
-      when: ssh_public_key_file_stat.stat.exists
-
     - name: "Ensure correct first_contact_deploy_password is set: {{ first_contact_deploy_user }}"
       become: true
       ansible.builtin.user:
@@ -54,6 +46,14 @@
         password: "{{ first_contact_deploy_password | password_hash('sha512', first_contact_salt) }}"
         update_password: "{{ first_contact_deploy_password_update }}"
       when: first_contact_deploy_password_update == "always"
+
+    - name: "Ensure SSH public key is on host: {{ first_contact_deploy_user }}"
+      ansible.posix.authorized_key:
+        user: "{{ first_contact_deploy_user }}"
+        state: present
+        key: "{{ lookup('file', '{{ first_contact_ssh_public_key_file }}') }}"
+      register: ssh_key_copied
+      when: ssh_public_key_file_stat.stat.exists
 
 - name: "Bootstrap"
   become: true

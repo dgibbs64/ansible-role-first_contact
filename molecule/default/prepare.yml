@@ -12,10 +12,18 @@
       when: ansible_distribution in ['Debian', 'Ubuntu']
       changed_when: false
 
-    - name: "Ensure pip is installed on the control node (non-Debian/Ubuntu)"
+    - name: "Ensure python3-pip is installed on the control node (Fedora)"
+      delegate_to: localhost
+      ansible.builtin.dnf:
+        name: python3-pip
+        state: present
+      when: ansible_distribution == 'Fedora'
+      changed_when: false
+
+    - name: "Ensure pip is installed on the control node (non-Debian/Ubuntu/Fedora)"
       delegate_to: localhost
       ansible.builtin.command: python3 -m ensurepip --upgrade
-      when: ansible_distribution not in ['Debian', 'Ubuntu']
+      when: ansible_distribution not in ['Debian', 'Ubuntu', 'Fedora']
       changed_when: false
 
     - name: "Ensure passlib is installed on the control node"

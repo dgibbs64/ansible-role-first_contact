@@ -26,14 +26,6 @@
         update_cache: true
       when: ansible_pkg_mgr == "dnf"
 
-    - name: "Install SSH (yum)"
-      become: true
-      ansible.builtin.yum:
-        name: "openssh-clients,openssh-server"
-        state: present
-        update_cache: true
-      when: ansible_pkg_mgr == "yum"
-
     - name: "Install SSH (zypper)"
       become: true
       community.general.zypper:

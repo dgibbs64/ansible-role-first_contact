@@ -22,7 +22,6 @@ This role is designed to perform the following actions upon initial contact with
 
 > Here is a [flow diagram](https://github.com/dgibbs64/ansible-role-first_contact/assets/4478206/9a86c416-bf57-45a6-af76-12d516cdd21e) to explain what this role is doing.
 
-
 - If the Ansible user (first_contact_deploy_user) does not exist on the host or does not have sudo, connect to the host as the root user and complete the following:
 
   - Bootstrap the host using the [robertdebock.bootstrap](https://galaxy.ansible.com/robertdebock/bootstrap) role.
@@ -53,7 +52,7 @@ This role can also be used to secure a host by disabling root login and password
 
 ## Requirements
 
-None.
+- passlib
 
 ## Role Variables
 

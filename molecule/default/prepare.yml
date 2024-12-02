@@ -4,6 +4,17 @@
   gather_facts: true
 
   tasks:
+    - name: "Ensure pip is installed on the control node"
+      delegate_to: localhost
+      ansible.builtin.command: python3 -m ensurepip --upgrade
+      changed_when: false
+
+    - name: "Ensure passlib is installed on the control node"
+      delegate_to: localhost
+      ansible.builtin.pip:
+        name: passlib
+      changed_when: false
+
     - name: "Get current user"
       ansible.builtin.command: whoami
       register: current_user

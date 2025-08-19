@@ -23,7 +23,6 @@ This role is designed to perform the following actions upon initial contact with
 > Here is a [flow diagram](https://github.com/dgibbs64/ansible-role-first_contact/assets/4478206/9a86c416-bf57-45a6-af76-12d516cdd21e) to explain what this role is doing.
 
 - If the Ansible user (first_contact_deploy_user) does not exist on the host or does not have sudo, connect to the host as the root user and complete the following:
-
   - Bootstrap the host using the [robertdebock.bootstrap](https://galaxy.ansible.com/robertdebock/bootstrap) role.
   - Install necessary dependencies for Ansible using the [robertdebock.core_dependencies](https://galaxy.ansible.com/robertdebock/core_dependencies) role.
   - Create the Ansible user on the host.
@@ -37,7 +36,6 @@ This role is designed to perform the following actions upon initial contact with
   - Add the public key of the control node to the Ansible users' authorized keys, allowing the control node to log in without a password.
   - Install necessary dependencies for Ansible using the [robertdebock.core_dependencies](https://galaxy.ansible.com/robertdebock/core_dependencies)
 - The following optional tasks are also completed if enabled:
-
   - Add the public key of the control node to the root users' authorized keys, allowing the control node to log in without a password.
   - Update the root password to either a random password or a specified password.
   - Disable root login via SSH.

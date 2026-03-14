@@ -46,11 +46,12 @@ jobs:
           - amazonlinux2023
           - debian11
           - debian12
-          - fedora39
-          - fedora40
+          - debian13
           - opensuseleap15
           - rockylinux8
           - rockylinux9
+          - rockylinux10
+          - ubuntu2004
           - ubuntu2204
           - ubuntu2404
         ansible_core_version:
@@ -76,7 +77,7 @@ jobs:
         if: matrix.ansible_core_version == 'latest'
 
       - name: Secrets to env
-        uses: oNaiPs/secrets-to-env-action@v1
+        uses: oNaiPs/secrets-to-env-action@1.8
         with:
           secrets: "${{ toJSON(secrets) }}"
 

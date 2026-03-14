@@ -32,3 +32,8 @@
 
     - name: "Root user"
       ansible.builtin.import_tasks: root_user.yml
+
+  rescue:
+    - name: "Fail first_contact_deploy_user accessibility test"
+      ansible.builtin.fail:
+        msg: "first_contact_deploy_user is not accessible or lacks required privileges: {{ first_contact_deploy_user }}"

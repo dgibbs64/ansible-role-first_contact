@@ -61,3 +61,8 @@
         line: "#includedir /etc/sudoers.d"
         state: present
         validate: "/usr/sbin/visudo -cf %s"
+
+  rescue:
+    - name: "Fail configure ansible deploy user on first contact"
+      ansible.builtin.fail:
+        msg: "Failed to configure ansible deploy user on first contact: {{ first_contact_deploy_user }}"

@@ -15,7 +15,7 @@
       changed_when: false
       delegate_to: localhost
       when:
-        - (first_contact_deploy_user | default('')) == ''
+        - (first_contact_deploy_user | default('', true)) == ''
         - (ansible_user | default('', true)) == ''
         - (ansible_ssh_user | default('', true)) == ''
 
@@ -23,7 +23,7 @@
       ansible.builtin.set_fact:
         first_contact_deploy_user: "{{ ansible_user | default(ansible_ssh_user | default(whoami.stdout | default('', true), true), true) }}"
       when:
-        - (first_contact_deploy_user | default('')) == ''
+        - (first_contact_deploy_user | default('', true)) == ''
         - (ansible_user | default('', true)) != '' or (ansible_ssh_user | default('', true)) != '' or (whoami is defined and (whoami.stdout | default('', true)) != '')
 
     - name: "Assert first_contact_deploy_user is resolved"

@@ -19,7 +19,6 @@ An [Ansible](https://www.ansible.com) role that on first contact with a host wil
 This role is designed to perform the following actions upon initial contact with a host:
 
 > The Ansible/deploy user (first_contact_deploy_user) is the user that runs Ansible commands on the host.
-
 > Here is a [flow diagram](https://github.com/dgibbs64/ansible-role-first_contact/assets/4478206/9a86c416-bf57-45a6-af76-12d516cdd21e) to explain what this role is doing.
 
 - If the Ansible user (first_contact_deploy_user) does not exist on the host or does not have sudo, connect to the host as the root user and complete the following:
@@ -44,7 +43,13 @@ This role is designed to perform the following actions upon initial contact with
 
 ## Example Usage
 
-This role is typically used when creating a new virtual private server (VPS) with providers such as [Linode](https://www.linode.com/docs/products/tools/cloud-manager/guides/manage-ssh-keys/), [Digital Ocean](https://docs.digitalocean.com/products/droplets/how-to/add-ssh-keys/), [AWS](https://docs.aws.amazon.com/opsworks/latest/userguide/security-ssh-access.html). During installation, you can normally specify a public key to be added to the root user. You can use this role to log in using the root user and then create the Ansible user.
+This role is typically used when creating a new virtual private server (VPS)
+with providers such as [Linode](https://www.linode.com/docs/products/tools/cloud-manager/guides/manage-ssh-keys/),
+[Digital Ocean](https://docs.digitalocean.com/products/droplets/how-to/add-ssh-keys/),
+and [AWS](https://docs.aws.amazon.com/opsworks/latest/userguide/security-ssh-access.html).
+During installation, you can normally specify a public key to be added to the
+root user. You can use this role to log in using the root user and then create
+the Ansible user.
 
 This role can also be used to secure a host by disabling root login and password authentication for SSH as well as update passwords for the root and Ansible users.
 
@@ -120,9 +125,23 @@ first_contact_salt: "usersalt"
 
 From the SSH man page:
 
-> ssh automatically maintains and checks a database containing identification for all hosts it has ever been used with. Host keys are stored in ~/.ssh/known_hosts in the user's home directory. Additionally, the file /etc/ssh/ssh_known_hosts is automatically checked for known hosts. Any new hosts are automatically added to the user's file. If a host's identification ever changes, ssh warns about this and disables password authentication to prevent server spoofing or man-in-the-middle attacks, which could otherwise be used to circumvent the encryption. The `StrictHostKeyChecking` option can be used to control logins to machines whose host key is not known or has changed.
+> ssh automatically maintains and checks a database containing identification
+> for all hosts it has ever been used with. Host keys are stored in
+> ~/.ssh/known_hosts in the user's home directory. Additionally, the file
+> /etc/ssh/ssh_known_hosts is automatically checked for known hosts. Any new
+> hosts are automatically added to the user's file. If a host's identification
+> ever changes, ssh warns about this and disables password authentication to
+> prevent server spoofing or man-in-the-middle attacks, which could otherwise
+> be used to circumvent the encryption. The `StrictHostKeyChecking` option can
+> be used to control logins to machines whose host key is not known or has
+> changed.
 
-If `first_contact_ssh_bypass_host_key_check` is `true`, SSH [host key checking](https://docs.ansible.com/ansible/latest/user_guide/connection_details.html#managing-host-key-checking) will be bypassed for first contact only. Subsequent checks will be carried out as per `host_key_checking` [setting](https://docs.ansible.com/ansible/latest/user_guide/connection_details.html#managing-host-key-checking). This removes the requirement to manually type yes to the below message.
+If `first_contact_ssh_bypass_host_key_check` is `true`, SSH
+[host key checking](https://docs.ansible.com/ansible/latest/user_guide/connection_details.html#managing-host-key-checking)
+will be bypassed for first contact only. Subsequent checks will be carried out
+as per `host_key_checking`
+[setting](https://docs.ansible.com/ansible/latest/user_guide/connection_details.html#managing-host-key-checking).
+This removes the requirement to manually type yes to the below message.
 
 ```bash
 The authenticity of host '192.168.1.1 (192.168.1.1)' can't be established.
@@ -155,7 +174,13 @@ Host key verification failed.
 If you are manually installing your server, you may not have the ability to add a public key to the root user on install. When you login as a standard user you can use the following to allow ssh access to root and add your public key to the root user.
 
 ```bash
-sudo mkdir -p /root/.ssh; sudo chmod 700 /root/.ssh; sudo touch /root/.ssh/authorized_keys; sudo chmod 600 /root/.ssh/authorized_keys; sudo echo "<insert public key>" > /root/.ssh/authorized_keys; sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config; sudo systemctl restart sshd
+sudo mkdir -p /root/.ssh
+sudo chmod 700 /root/.ssh
+sudo touch /root/.ssh/authorized_keys
+sudo chmod 600 /root/.ssh/authorized_keys
+sudo echo "<insert public key>" > /root/.ssh/authorized_keys
+sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+sudo systemctl restart sshd
 ```
 
 Once first contact has been established, you can disable root access again. By using `first_contact_root_ssh_disable` variable or the below one-liner.

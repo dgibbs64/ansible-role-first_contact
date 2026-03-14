@@ -1,5 +1,5 @@
 ---
-# Second contact is for hosts that have a deploy user that is already accessable with sudo.
+# Second contact is for hosts that have a deploy user that is already accessible with sudo.
 # If python3 is not installed then bootstrap (raw)
 - name: "Test python3"
   block:

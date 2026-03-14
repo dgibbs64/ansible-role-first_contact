@@ -15,7 +15,7 @@
       changed_when: false
       delegate_to: localhost
       when:
-        - first_contact_deploy_user is none or (first_contact_deploy_user | default('')) == ''
+        - (first_contact_deploy_user | default('')) == ''
         - ansible_user is not defined
         - ansible_ssh_user is not defined
 
@@ -23,7 +23,7 @@
       ansible.builtin.set_fact:
         first_contact_deploy_user: "{{ ansible_user | default(ansible_ssh_user | default(whoami.stdout)) }}"
       when:
-        - first_contact_deploy_user is none or (first_contact_deploy_user | default('')) == ''
+        - (first_contact_deploy_user | default('')) == ''
         - ansible_user is defined or ansible_ssh_user is defined or (whoami is defined and whoami.stdout is defined)
 
     - name: "Display first_contact_deploy_user"

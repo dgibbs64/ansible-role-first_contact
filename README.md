@@ -95,7 +95,7 @@ first_contact_salt: "usersalt"
 
 ### Deploy User Settings
 
-- `first_contact_deploy_user` is the user that Ansible will use to log in to the host. Leave unset to use the user that is running Ansible.
+- `first_contact_deploy_user` is the user that Ansible will use to log in to the host. Leave unset to use the current SSH connection user (`ansible_user`/`ansible_ssh_user`), with the controller user as a fallback.
 - `first_contact_deploy_password` is the password for the `first_contact_deploy_user` account. Leave unset to generate a random password.
 - `first_contact_deploy_password_update` is how the password for the `first_contact_deploy_user` account password should be updated. Either only `on_create` or `always`
 - `first_contact_deploy_shell` is the shell that the deploy user uses.

@@ -14,5 +14,10 @@ platforms:
     cgroupns_mode: host
 provisioner:
   name: ansible
+  inventory:
+    host_vars:
+      all:
+        ansible_user: root
+        ansible_remote_tmp: /tmp/.ansible/tmp
 verifier:
   name: ansible

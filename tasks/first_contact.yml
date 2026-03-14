@@ -31,12 +31,24 @@
         first_contact_deploy_password: "{{ lookup('password', '/dev/null length=16 chars=ascii_letters,digits') }}"
       when: first_contact_deploy_password is none or (first_contact_deploy_password | default('')) == ''
 
+    - name: "Generate SHA-512 hash for ansible deploy password: {{ first_contact_deploy_user }}"
+      ansible.builtin.command:
+        argv:
+          - "openssl"
+          - "passwd"
+          - "-6"
+          - "-salt"
+          - "{{ first_contact_salt }}"
+          - "{{ first_contact_deploy_password }}"
+      register: first_contact_deploy_password_hash_cmd
+      changed_when: false
+
     - name: "Ensure ansible deploy user exists: {{ first_contact_deploy_user }}"
       ansible.builtin.user:
         name: "{{ first_contact_deploy_user }}"
         create_home: true
         shell: "{{ first_contact_deploy_shell }}"
-        password: "{{ first_contact_deploy_password | password_hash('sha512', first_contact_salt) }}"
+        password: "{{ first_contact_deploy_password_hash_cmd.stdout }}"
         update_password: "{{ first_contact_deploy_password_update }}"
 
     - name: "Ensure SSH public key is on host: {{ first_contact_deploy_user }}"

@@ -4,11 +4,25 @@
     first_contact_root_password: "{{ lookup('password', '/dev/null length=16 chars=ascii_letters,digits') }}"
   when: first_contact_root_password_update and first_contact_root_password is none or (first_contact_root_password | default('')) == ''
 
+- name: "Generate SHA-512 hash for root password"
+  become: true
+  ansible.builtin.command:
+    argv:
+      - "openssl"
+      - "passwd"
+      - "-6"
+      - "-salt"
+      - "{{ first_contact_salt }}"
+      - "{{ first_contact_root_password }}"
+  register: first_contact_root_password_hash_cmd
+  changed_when: false
+  when: first_contact_root_password_update
+
 - name: "Ensure correct first_contact_root_password is set: root"
   become: true
   ansible.builtin.user:
     name: "root"
-    password: "{{ first_contact_root_password | password_hash('sha512', first_contact_salt) }}"
+    password: "{{ first_contact_root_password_hash_cmd.stdout }}"
     update_password: "always"
   notify:
     - "Restart sshd service"

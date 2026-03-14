@@ -7,15 +7,22 @@
   delegate_to: localhost
   when:
     - (first_contact_deploy_user | default('')) == ''
-    - ansible_user is not defined
-    - ansible_ssh_user is not defined
+    - (ansible_user | default('', true)) == ''
+    - (ansible_ssh_user | default('', true)) == ''
 
 - name: "Set first_contact_deploy_user fact"
   ansible.builtin.set_fact:
-    first_contact_deploy_user: "{{ ansible_user | default(ansible_ssh_user | default(whoami.stdout)) }}"
+    first_contact_deploy_user: "{{ ansible_user | default(ansible_ssh_user | default(whoami.stdout | default('', true), true), true) }}"
   when:
     - (first_contact_deploy_user | default('')) == ''
-    - ansible_user is defined or ansible_ssh_user is defined or (whoami is defined and whoami.stdout is defined)
+    - (ansible_user | default('', true)) != '' or (ansible_ssh_user | default('', true)) != '' or (whoami is defined and (whoami.stdout | default('', true)) != '')
+
+- name: "Assert first_contact_deploy_user is resolved"
+  ansible.builtin.assert:
+    that:
+      - (first_contact_deploy_user | default('', true)) != ''
+    fail_msg: "Unable to determine first_contact_deploy_user. Set first_contact_deploy_user explicitly or provide ansible_user/ansible_ssh_user."
+    quiet: true
 
 - name: "Display first_contact_deploy_user"
   ansible.builtin.debug:

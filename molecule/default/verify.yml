@@ -14,7 +14,7 @@
       register: whoami
       changed_when: false
       delegate_to: localhost
-      when: first_contact_deploy_user is none or (first_contact_deploy_user | default('')) == ''
+      when: (first_contact_deploy_user | default('')) == ''
 
     - name: "Set first_contact_deploy_user fact"
       ansible.builtin.set_fact:

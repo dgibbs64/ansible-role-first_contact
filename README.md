@@ -30,6 +30,7 @@ This role is designed to perform the following actions upon initial contact with
   - Add the public key of the control node to the Ansible users' authorized keys, allowing the control node to log in without a password.
   - Update the Ansible users password to either a random password or a specified password.
   - Set the Ansible user's shell to the desired shell program.
+  - If root SSH is not available, first_contact will try `first_contact_initial_fallback_user` (default `ubuntu`), enable root SSH access, then continue the normal root-based flow.
 
 - If the Ansible user already exists and has sudo, the role will connect to the host as the Ansible user and do the following:
   - If Python is not installed, Bootstrap the host using the [robertdebock.bootstrap](https://galaxy.ansible.com/robertdebock/bootstrap) role.
@@ -85,6 +86,10 @@ first_contact_ssh_password_disable: false
 first_contact_ssh_private_key_file: "~/.ssh/id_ed25519"
 first_contact_ssh_public_key_file: "~/.ssh/id_ed25519.pub"
 
+# Initial access fallback settings (e.g. Ubuntu cloud images)
+first_contact_initial_fallback_user: "ubuntu"
+first_contact_remove_initial_fallback_user: false
+
 first_contact_salt: "usersalt"
 ```
 
@@ -111,6 +116,11 @@ first_contact_salt: "usersalt"
 
 - `first_contact_ssh_private_key_file` is the path to the private key file.
 - `first_contact_ssh_public_key_file` is the path to the public key file.
+
+### Initial Access Fallback Settings
+
+- `first_contact_initial_fallback_user` is the temporary first-login user used when root SSH access is not available (for example Ubuntu cloud images that ship with `ubuntu`).
+- `first_contact_remove_initial_fallback_user` removes the fallback user account after first contact completes. This is skipped automatically when the fallback user matches `first_contact_deploy_user`.
 
 - `first_contact_salt` is a salt used to ensure idempotency when updating passwords
 

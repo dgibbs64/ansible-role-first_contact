@@ -4,12 +4,6 @@
   gather_facts: true
 
   tasks:
-    - name: "Ensure python3-pip is installed on the control node (Debian/Ubuntu)"
-      delegate_to: localhost
-      ansible.builtin.apt:
-        name: python3-pip
-        state: present
-
     - name: "Get current user"
       ansible.builtin.command: whoami
       register: current_user

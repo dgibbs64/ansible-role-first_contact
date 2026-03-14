@@ -1,0 +1,29 @@
+{
+  "name": "ansible-role-first_contact",
+  "version": "1.0.0",
+  "description": "An [Ansible](https://www.ansible.com) role that on first contact with a host will prepare it to be managed by Ansible.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dgibbs64/ansible-role-first_contact.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/dgibbs64/ansible-role-first_contact/issues"
+  },
+  "homepage": "https://github.com/dgibbs64/ansible-role-first_contact#readme",
+  "dependencies": {
+    "prettier": "^3.8.1",
+    "prettier-plugin-jinja-template": "^2.1.0",
+    "prettier-plugin-sh": "^0.18.0",
+    "sh-syntax": "^0.5.8",
+    "tslib": "^2.8.1"
+  },
+  "devDependencies": {}
+}

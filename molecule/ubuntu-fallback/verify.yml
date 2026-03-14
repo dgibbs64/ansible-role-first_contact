@@ -1,0 +1,44 @@
+---
+- name: "Verify"
+  hosts: all
+  gather_facts: false
+  vars:
+    first_contact_deploy_user: "ansible"
+    first_contact_ssh_connection_timeout: 3
+  tasks:
+    - name: "Check if connection still works"
+      ansible.builtin.ping:
+
+    - name: "Set first_contact_deploy_user to current user"
+      become: false
+      ansible.builtin.command: whoami
+      register: whoami
+      changed_when: false
+      delegate_to: localhost
+      when: first_contact_deploy_user is none or (first_contact_deploy_user | default('')) == ''
+
+    - name: "Set first_contact_deploy_user fact"
+      ansible.builtin.set_fact:
+        first_contact_deploy_user: "{{ whoami.stdout }}"
+      when: whoami is defined and whoami.stdout is defined
+
+    - name: "Test connection for ansible deploy user: {{ first_contact_deploy_user }}"
+      remote_user: "{{ first_contact_deploy_user }}"
+      ansible.builtin.wait_for_connection:
+        timeout: "{{ first_contact_ssh_connection_timeout }}"
+
+    - name: "Test sudo access for ansible deploy: {{ first_contact_deploy_user }}"
+      become: true
+      ansible.builtin.raw: sudo --version
+      changed_when: false
+
+    - name: "Test connection for root user"
+      remote_user: "root"
+      ansible.builtin.wait_for_connection:
+        timeout: "{{ first_contact_ssh_connection_timeout }}"
+
+    - name: "Check fallback user is removed"
+      ansible.builtin.command: getent passwd ubuntu
+      register: ubuntu_user_check
+      changed_when: false
+      failed_when: ubuntu_user_check.rc == 0

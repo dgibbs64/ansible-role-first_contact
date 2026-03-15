@@ -77,7 +77,7 @@ jobs:
         if: matrix.ansible_core_version == 'latest'
 
       - name: Secrets to env
-        uses: oNaiPs/secrets-to-env-action@1.8
+        uses: oNaiPs/secrets-to-env-action@v1.8
         with:
           secrets: "${{ toJSON(secrets) }}"
 

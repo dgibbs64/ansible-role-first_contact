@@ -7,11 +7,12 @@
         timeout: "{{ first_contact_ssh_connection_timeout }}"
 
     - name: "Test sudo access for ansible deploy: {{ first_contact_deploy_user }}"
-      become: true
-      ansible.builtin.command: id -u
+      ansible.builtin.raw: sudo -n id -u
       changed_when: false
-      register: deploy_user_become_uid
-      failed_when: deploy_user_become_uid.stdout | trim != "0"
+      register: deploy_user_sudo_check
+      failed_when:
+        - deploy_user_sudo_check.rc != 0
+        - deploy_user_sudo_check.stdout | trim != "0"
 
     - name: "Second contact"
       ansible.builtin.include_tasks: second_contact.yml
@@ -28,11 +29,12 @@
         timeout: "{{ first_contact_ssh_connection_timeout }}"
 
     - name: "Test sudo access for ansible deploy: {{ first_contact_deploy_user }}"
-      become: true
-      ansible.builtin.command: id -u
+      ansible.builtin.raw: sudo -n id -u
       changed_when: false
-      register: deploy_user_become_uid
-      failed_when: deploy_user_become_uid.stdout | trim != "0"
+      register: deploy_user_sudo_check
+      failed_when:
+        - deploy_user_sudo_check.rc != 0
+        - deploy_user_sudo_check.stdout | trim != "0"
 
     - name: "Root user"
       ansible.builtin.import_tasks: root_user.yml

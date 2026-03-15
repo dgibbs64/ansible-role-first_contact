@@ -52,7 +52,6 @@ jobs:
           - rockylinux8
           - rockylinux9
           - rockylinux10
-          - ubuntu2004
           - ubuntu2204
           - ubuntu2404
         ansible_core_version:
@@ -70,11 +69,11 @@ jobs:
           persist-credentials: false
 
       - name: Install test dependencies (specific version)
-        run: pip3 install ansible-core==${{ matrix.ansible_core_version }} molecule-plugins[docker] jmespath passlib
+        run: pip3 install ansible-core==${{ matrix.ansible_core_version }} molecule-plugins[docker] jmespath
         if: matrix.ansible_core_version != 'latest'
 
       - name: Install test dependencies (latest version)
-        run: pip3 install ansible-core molecule-plugins[docker] jmespath passlib
+        run: pip3 install ansible-core molecule-plugins[docker] jmespath
         if: matrix.ansible_core_version == 'latest'
 
       - name: Secrets to env

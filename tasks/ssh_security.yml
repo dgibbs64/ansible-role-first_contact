@@ -1,4 +1,19 @@
----
+- name: "Detect container sudo PAM limitation for SSH security tasks"
+  ansible.builtin.set_fact:
+    first_contact_skip_privileged_ssh_security: >-
+      {{
+        (ansible_facts.virtualization_type | default('')) in ['docker', 'container', 'podman'] and
+        (deploy_user_sudo_check is defined) and
+        (deploy_user_sudo_check.rc | default(0) != 0) and
+        ((deploy_user_sudo_check.stderr | default('')) is search('PAM account management error'))
+      }}
+  changed_when: false
+
+- name: "Notice SSH security tasks skipped due to container PAM limitation"
+  ansible.builtin.debug:
+    msg: "Skipping privileged SSH security tasks due to container PAM limitation"
+  when: first_contact_skip_privileged_ssh_security
+
 - name: "Ensure SSH password authentication is disabled"
   become: true
   ansible.builtin.lineinfile:
@@ -7,7 +22,9 @@
     line: "PasswordAuthentication no"
     state: present
     validate: "sshd -t -f %s"
-  when: first_contact_ssh_password_disable is true
+  when:
+    - first_contact_ssh_password_disable is true
+    - not first_contact_skip_privileged_ssh_security
 
 - name: "Ensure SSH public key authentication is enabled"
   become: true
@@ -17,4 +34,6 @@
     line: "PubkeyAuthentication yes"
     state: present
     validate: "sshd -t -f %s"
-  when: first_contact_ssh_password_disable is false
+  when:
+    - first_contact_ssh_password_disable is false
+    - not first_contact_skip_privileged_ssh_security

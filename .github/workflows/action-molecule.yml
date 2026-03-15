@@ -70,11 +70,11 @@ jobs:
           persist-credentials: false
 
       - name: Install test dependencies (specific version)
-        run: pip3 install ansible-core==${{ matrix.ansible_core_version }} molecule-plugins[docker] jmespath
+        run: pip3 install ansible-core==${{ matrix.ansible_core_version }} molecule-plugins[docker] jmespath passlib
         if: matrix.ansible_core_version != 'latest'
 
       - name: Install test dependencies (latest version)
-        run: pip3 install ansible-core molecule-plugins[docker] jmespath
+        run: pip3 install ansible-core molecule-plugins[docker] jmespath passlib
         if: matrix.ansible_core_version == 'latest'
 
       - name: Secrets to env

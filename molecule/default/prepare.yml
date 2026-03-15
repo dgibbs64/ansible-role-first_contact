@@ -10,6 +10,12 @@
         name: python3-pip
         state: present
 
+    - name: "Ensure passlib is installed on the control node"
+      delegate_to: localhost
+      ansible.builtin.pip:
+        name: passlib
+        state: present
+
     - name: "Get current user"
       ansible.builtin.command: whoami
       register: current_user

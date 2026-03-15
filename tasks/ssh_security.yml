@@ -1,3 +1,4 @@
+---
 - name: "Detect container sudo PAM limitation for SSH security tasks"
   ansible.builtin.set_fact:
     first_contact_skip_privileged_ssh_security: >-

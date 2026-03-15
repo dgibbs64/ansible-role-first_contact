@@ -53,6 +53,16 @@ the Ansible user.
 
 This role can also be used to secure a host by disabling root login and password authentication for SSH as well as update passwords for the root and Ansible users.
 
+## Supported Platforms
+
+The following distribution families and versions are currently supported and tested in CI:
+
+- Ubuntu: 22.04 (jammy), 24.04 (noble)
+- Debian: 11 (bullseye), 12 (bookworm), 13 (trixie)
+- Rocky Linux: 8, 9, 10
+- openSUSE Leap: 15
+- Amazon Linux: 2023
+
 ## Requirements
 
 - passlib

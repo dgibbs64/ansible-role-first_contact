@@ -11,27 +11,21 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       versions:
+        - "noble"
         - "jammy"
-        - "bionic"
     - name: Debian
       versions:
+        - "trixie"
         - "bookworm"
         - "bullseye"
-        - "buster"
     - name: EL
       versions:
-        - "7"
         - "8"
         - "9"
-    - name: Fedora
-      versions:
-        - "38"
-        - "37"
-        - "36"
+        - "10"
     - name: opensuse
       versions:
-        - "15.4"
-        - "15.3"
+        - "15"
     - name: Amazon Linux
       versions:
         - "2023"

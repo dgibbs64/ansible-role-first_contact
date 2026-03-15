@@ -17,28 +17,25 @@
       delegate_to: localhost
 
     - name: "Install SSH (apt)"
-      become: true
       ansible.builtin.apt:
         name: "openssh-client,openssh-server"
         state: present
         update_cache: true
-      when: ansible_pkg_mgr == "apt"
+      when: ansible_facts.pkg_mgr == "apt"
 
     - name: "Install SSH (dnf)"
-      become: true
       ansible.builtin.dnf:
         name: "openssh-clients,openssh-server"
         state: present
         update_cache: true
-      when: ansible_pkg_mgr == "dnf"
+      when: ansible_facts.pkg_mgr == "dnf"
 
     - name: "Install SSH (zypper)"
-      become: true
       community.general.zypper:
         name: "openssh"
         state: present
         update_cache: true
-      when: ansible_pkg_mgr == "zypper"
+      when: ansible_facts.pkg_mgr == "zypper"
 
     - name: "Create .ssh directory"
       delegate_to: localhost
@@ -62,27 +59,24 @@
         size: 4096
 
     - name: "Start sshd service"
-      become: true
       ansible.builtin.service:
         name: sshd
         state: started
         enabled: true
-      when: not (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('24.04', '>='))
+      when: not (ansible_facts.distribution == 'Ubuntu' and ansible_facts.distribution_version is version('24.04', '>='))
 
     - name: "Start sshd service"
-      become: true
       ansible.builtin.service:
         name: ssh.socket
         state: started
         enabled: true
-      when: ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('24.04', '>=')
+      when: ansible_facts.distribution == 'Ubuntu' and ansible_facts.distribution_version is version('24.04', '>=')
 
     - name: "Ensure /run/sshd exists"
-      become: true
       ansible.builtin.file:
         path: "/run/sshd"
         state: directory
         owner: root
         group: root
         mode: "0755"
-      when: ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('24.04', '>=')
+      when: ansible_facts.distribution == 'Ubuntu' and ansible_facts.distribution_version is version('24.04', '>=')

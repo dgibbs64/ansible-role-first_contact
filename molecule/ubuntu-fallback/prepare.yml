@@ -6,6 +6,7 @@
     ansible_connection: docker
     ansible_host: "{{ inventory_hostname }}"
     ansible_user: root
+    ansible_remote_tmp: /tmp/.ansible-root/tmp
 
   tasks:
     - name: "Install SSH (apt)"
@@ -113,15 +114,9 @@
         state: restarted
       failed_when: false
 
-    - name: "Wait for sshd to be accepting connections"
+    - name: "Wait for sshd to be accepting connections on published port"
       ansible.builtin.wait_for:
         host: "127.0.0.1"
-        port: 22
+        port: 2222
         timeout: 30
       delegate_to: localhost
-
-    - name: "Remove root-owned Ansible tmp so ubuntu can create it via SSH"
-      become: true
-      ansible.builtin.file:
-        path: /tmp/.ansible
-        state: absent

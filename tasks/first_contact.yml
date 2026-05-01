@@ -136,7 +136,9 @@
       ansible.builtin.fail:
         msg: "Failed to configure ansible deploy user on first contact: {{ first_contact_deploy_user }}"
 
-- name: "Update ansible_user to deploy user"
+- name: "Update ansible_user to deploy user after removing initial fallback user"
   ansible.builtin.set_fact:
     ansible_user: "{{ first_contact_deploy_user }}"
-  when: (ansible_user | default('root')) != first_contact_deploy_user
+  when:
+    - first_contact_remove_initial_fallback_user | bool
+    - (ansible_user | default('root')) == first_contact_initial_fallback_user

@@ -2,6 +2,7 @@
 - name: "Converge"
   hosts: all
   vars:
+    first_contact_deploy_user: "ansible"
     first_contact_root_ssh_disable: true
     first_contact_root_login_disable: true
     first_contact_root_password: "test"

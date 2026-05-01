@@ -2,6 +2,7 @@
 - name: "Converge"
   hosts: all
   vars:
+    first_contact_deploy_user: "ansible"
     first_contact_salt: "usersalt"
   roles:
     - role: "dgibbs64.first_contact"

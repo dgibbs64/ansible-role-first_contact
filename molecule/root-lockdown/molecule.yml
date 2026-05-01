@@ -15,7 +15,7 @@ platforms:
 provisioner:
   name: ansible
   inventory:
-    host_vars:
+    group_vars:
       all:
         ansible_user: root
         ansible_remote_tmp: /tmp/.ansible/tmp

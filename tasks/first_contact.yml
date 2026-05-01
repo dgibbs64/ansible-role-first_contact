@@ -30,7 +30,7 @@
       ansible.posix.authorized_key:
         user: "root"
         state: present
-        key: "{{ lookup('file', '{{ first_contact_ssh_public_key_file }}') }}"
+        key: "{{ lookup('file', first_contact_ssh_public_key_file) }}"
       when: ssh_public_key_file_stat.stat.exists
 
     - name: "Ensure SSH root login is enabled"
@@ -103,7 +103,7 @@
       ansible.posix.authorized_key:
         user: "{{ first_contact_deploy_user }}"
         state: present
-        key: "{{ lookup('file', '{{ first_contact_ssh_public_key_file }}') }}"
+        key: "{{ lookup('file', first_contact_ssh_public_key_file) }}"
       when: ssh_public_key_file_stat.stat.exists
 
     - name: "Ensure ansible deploy user is added to sudoers: {{ first_contact_deploy_user }}"

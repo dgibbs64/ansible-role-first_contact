@@ -1,6 +1,10 @@
 ---
 - name: "Test connection"
   block:
+    - name: "Check deploy user exists: {{ first_contact_deploy_user }}"
+      ansible.builtin.command: "getent passwd {{ first_contact_deploy_user }}"
+      changed_when: false
+
     - name: "Test connection for ansible deploy user: {{ first_contact_deploy_user }}"
       remote_user: "{{ first_contact_deploy_user }}"
       ansible.builtin.wait_for_connection:

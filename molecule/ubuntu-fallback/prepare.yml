@@ -1,4 +1,27 @@
 ---
+- name: "Prepare localhost"
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: "Create .ssh directory"
+      ansible.builtin.file:
+        path: "{{ lookup('env', 'HOME') }}/.ssh"
+        state: directory
+        mode: "0700"
+
+    - name: "Create known_hosts"
+      ansible.builtin.file:
+        path: "{{ lookup('env', 'HOME') }}/.ssh/known_hosts"
+        state: touch
+        mode: "0600"
+
+    - name: "Generate ed25519 key"
+      ansible.builtin.command:
+        cmd: "ssh-keygen -t ed25519 -N '' -f {{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
+        creates: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
+      changed_when: true
+
 - name: "Prepare"
   hosts: all
   gather_facts: true
@@ -16,27 +39,6 @@
         state: present
         update_cache: true
       when: ansible_facts.pkg_mgr == "apt"
-
-    - name: "Create .ssh directory"
-      delegate_to: localhost
-      ansible.builtin.file:
-        path: "{{ lookup('env', 'HOME') }}/.ssh"
-        state: directory
-        mode: "0700"
-
-    - name: "Create known_hosts"
-      delegate_to: localhost
-      ansible.builtin.file:
-        path: "{{ lookup('env', 'HOME') }}/.ssh/known_hosts"
-        state: touch
-        mode: "0600"
-
-    - name: "Generate ed25519 key"
-      delegate_to: localhost
-      community.crypto.openssh_keypair:
-        path: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
-        type: ed25519
-        size: 4096
 
     - name: "Check whether ubuntu fallback user exists before test setup"
       become: true

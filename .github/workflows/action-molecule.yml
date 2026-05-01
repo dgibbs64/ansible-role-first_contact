@@ -97,9 +97,9 @@ jobs:
           MOLECULE_IMAGE: "${{ matrix.distro }}"
 
       - name: Run Molecule Ubuntu fallback scenario
-        if: matrix.distro == 'ubuntu2404'
+        if: matrix.distro == 'ubuntu2404' || matrix.distro == 'ubuntu2604'
         run: molecule test -s ubuntu-fallback
         env:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"
-          MOLECULE_IMAGE: "ubuntu2404"
+          MOLECULE_IMAGE: "${{ matrix.distro }}"

@@ -112,3 +112,16 @@
         name: ssh
         state: restarted
       failed_when: false
+
+    - name: "Wait for sshd to be accepting connections"
+      ansible.builtin.wait_for:
+        host: "127.0.0.1"
+        port: 22
+        timeout: 30
+      delegate_to: localhost
+
+    - name: "Remove root-owned Ansible tmp so ubuntu can create it via SSH"
+      become: true
+      ansible.builtin.file:
+        path: /tmp/.ansible
+        state: absent

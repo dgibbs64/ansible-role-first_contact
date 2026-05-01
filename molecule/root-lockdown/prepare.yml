@@ -15,6 +15,7 @@
       ansible.builtin.pip:
         name: passlib
         state: present
+        extra_args: "--break-system-packages"
 
     - name: "Get current user"
       ansible.builtin.command: whoami

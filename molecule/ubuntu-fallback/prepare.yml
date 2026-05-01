@@ -10,7 +10,7 @@
         name: "openssh-client,openssh-server,sudo,python3-passlib"
         state: present
         update_cache: true
-      when: ansible_pkg_mgr == "apt"
+      when: ansible_facts.pkg_mgr == "apt"
 
     - name: "Create .ssh directory"
       delegate_to: localhost

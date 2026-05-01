@@ -109,16 +109,9 @@
       ansible.builtin.command: /usr/sbin/sshd
       changed_when: true
 
-    - name: "Get container IP address"
-      ansible.builtin.command: >
-        docker inspect -f '{{ "{{" }}range .NetworkSettings.Networks{{ "}}" }}{{ "{{" }}.IPAddress{{ "}}" }}{{ "{{" }}end{{ "}}" }}' {{ inventory_hostname }}
-      delegate_to: localhost
-      changed_when: false
-      register: container_ip
-
     - name: "Wait for sshd to be accepting connections"
       ansible.builtin.wait_for:
-        host: "{{ container_ip.stdout }}"
+        host: "{{ ansible_host }}"
         port: 22
         timeout: 60
       delegate_to: localhost

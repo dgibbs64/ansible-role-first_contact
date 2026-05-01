@@ -35,6 +35,7 @@ jobs:
 
       - name: Run ansible-lint
         uses: ansible/ansible-lint@v26
+        if: ${{ !env.ACT }}
 
   molecule:
     name: Molecule

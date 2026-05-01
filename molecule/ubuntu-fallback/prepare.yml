@@ -92,25 +92,22 @@
         state: present
         validate: "sshd -t -f %s"
 
-    - name: "Disable SSH socket activation (unreliable in Docker containers)"
+    - name: "Generate SSH host keys if missing"
       become: true
-      ansible.builtin.systemd:
-        name: ssh.socket
-        state: stopped
-        enabled: false
+      ansible.builtin.command: ssh-keygen -A
+      args:
+        creates: /etc/ssh/ssh_host_ed25519_key
+
+    - name: "Kill any existing sshd process"
+      become: true
+      ansible.builtin.command: pkill -f /usr/sbin/sshd
+      changed_when: true
       failed_when: false
 
-    - name: "Start SSH service as persistent daemon"
+    - name: "Start sshd directly (bypasses systemd, reliable in Docker)"
       become: true
-      ansible.builtin.systemd:
-        name: "{{ item }}"
-        state: started
-        enabled: true
-        daemon_reload: true
-      failed_when: false
-      loop:
-        - ssh
-        - sshd
+      ansible.builtin.command: /usr/sbin/sshd
+      changed_when: true
 
     - name: "Wait for sshd to be accepting connections on published port"
       ansible.builtin.wait_for:

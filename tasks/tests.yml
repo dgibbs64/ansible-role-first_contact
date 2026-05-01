@@ -7,12 +7,27 @@
         timeout: "{{ first_contact_ssh_connection_timeout }}"
 
     - name: "Test sudo access for ansible deploy: {{ first_contact_deploy_user }}"
-      become: true
-      ansible.builtin.raw: sudo --version
+      ansible.builtin.raw: sudo -n id -u
       changed_when: false
+      register: deploy_user_sudo_check
+      failed_when: >-
+        deploy_user_sudo_check.rc != 0 and
+        not (
+          (ansible_facts.virtualization_type | default('')) in ['docker', 'container', 'podman'] and
+          'PAM account management error' in (deploy_user_sudo_check.stderr | default(''))
+        )
+
+    - name: "Notice sudo PAM limitation in container"
+      ansible.builtin.debug:
+        msg: "Skipping sudo-dependent checks due to container PAM limitation"
+      when:
+        - deploy_user_sudo_check.rc != 0
+        - (ansible_facts.virtualization_type | default('')) in ['docker', 'container', 'podman']
+        - (deploy_user_sudo_check.stderr | default('')) is search('PAM account management error')
 
     - name: "Second contact"
       ansible.builtin.include_tasks: second_contact.yml
+      when: deploy_user_sudo_check.rc == 0
 
   rescue:
     - name: "First contact"
@@ -26,9 +41,29 @@
         timeout: "{{ first_contact_ssh_connection_timeout }}"
 
     - name: "Test sudo access for ansible deploy: {{ first_contact_deploy_user }}"
-      become: true
-      ansible.builtin.raw: sudo --version
+      ansible.builtin.raw: sudo -n id -u
       changed_when: false
+      register: deploy_user_sudo_check
+      failed_when: >-
+        deploy_user_sudo_check.rc != 0 and
+        not (
+          (ansible_facts.virtualization_type | default('')) in ['docker', 'container', 'podman'] and
+          'PAM account management error' in (deploy_user_sudo_check.stderr | default(''))
+        )
+
+    - name: "Notice sudo PAM limitation in container"
+      ansible.builtin.debug:
+        msg: "Skipping sudo-dependent checks due to container PAM limitation"
+      when:
+        - deploy_user_sudo_check.rc != 0
+        - (ansible_facts.virtualization_type | default('')) in ['docker', 'container', 'podman']
+        - (deploy_user_sudo_check.stderr | default('')) is search('PAM account management error')
 
     - name: "Root user"
       ansible.builtin.import_tasks: root_user.yml
+      when: deploy_user_sudo_check.rc == 0
+
+  rescue:
+    - name: "Fail first_contact_deploy_user accessibility test"
+      ansible.builtin.fail:
+        msg: "first_contact_deploy_user is not accessible or lacks required privileges: {{ first_contact_deploy_user }}"

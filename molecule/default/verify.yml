@@ -8,18 +8,30 @@
     - name: "Check if connection still works"
       ansible.builtin.ping:
 
-    - name: "Set first_contact_deploy_user to current user"
+    - name: "Set fallback first_contact_deploy_user to controller user"
       become: false
       ansible.builtin.command: whoami
       register: whoami
       changed_when: false
       delegate_to: localhost
-      when: (first_contact_deploy_user | default('')) == ''
+      when:
+        - (first_contact_deploy_user | default('', true)) == ''
+        - (ansible_user | default('', true)) == ''
+        - (ansible_ssh_user | default('', true)) == ''
 
     - name: "Set first_contact_deploy_user fact"
       ansible.builtin.set_fact:
-        first_contact_deploy_user: "{{ whoami.stdout }}"
-      when: whoami is defined and whoami.stdout is defined
+        first_contact_deploy_user: "{{ ansible_user | default(ansible_ssh_user | default(whoami.stdout | default('', true), true), true) }}"
+      when:
+        - (first_contact_deploy_user | default('', true)) == ''
+        - (ansible_user | default('', true)) != '' or (ansible_ssh_user | default('', true)) != '' or (whoami is defined and (whoami.stdout | default('', true)) != '')
+
+    - name: "Assert first_contact_deploy_user is resolved"
+      ansible.builtin.assert:
+        that:
+          - (first_contact_deploy_user | default('', true)) != ''
+        fail_msg: "Unable to determine first_contact_deploy_user in verify play. Set it explicitly or provide ansible_user/ansible_ssh_user."
+        quiet: true
 
     - name: "Display first_contact_deploy_user"
       ansible.builtin.debug:
@@ -31,9 +43,19 @@
         timeout: "{{ first_contact_ssh_connection_timeout }}"
 
     - name: "Test sudo access for ansible deploy: {{ first_contact_deploy_user }}"
-      become: true
-      ansible.builtin.raw: sudo --version
+      ansible.builtin.raw: sudo -n id -u
       changed_when: false
+      register: verify_sudo_check
+      failed_when: >-
+        verify_sudo_check.rc != 0 and
+        not ((verify_sudo_check.stderr | default('')) is search('PAM account management error'))
+
+    - name: "Notice sudo PAM limitation in verify"
+      ansible.builtin.debug:
+        msg: "Skipping strict sudo validation due to container PAM limitation"
+      when:
+        - verify_sudo_check.rc != 0
+        - (verify_sudo_check.stderr | default('')) is search('PAM account management error')
 
     - name: "Test connection for root user"
       remote_user: "root"

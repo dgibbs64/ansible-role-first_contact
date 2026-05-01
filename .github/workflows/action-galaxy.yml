@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
@@ -33,7 +33,7 @@ jobs:
           yamllint .
 
       - name: Run ansible-lint
-        uses: ansible/ansible-lint@v25
+        uses: ansible/ansible-lint@v26
 
   molecule:
     name: Molecule
@@ -46,12 +46,11 @@ jobs:
           - amazonlinux2023
           - debian11
           - debian12
-          - fedora39
-          - fedora40
+          - debian13
           - opensuseleap15
           - rockylinux8
           - rockylinux9
-          - ubuntu2004
+          - rockylinux10
           - ubuntu2204
           - ubuntu2404
         ansible_core_version:
@@ -64,7 +63,7 @@ jobs:
             ansible_core_version: latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
@@ -77,7 +76,7 @@ jobs:
         if: matrix.ansible_core_version == 'latest'
 
       - name: Secrets to env
-        uses: oNaiPs/secrets-to-env-action@v1
+        uses: oNaiPs/secrets-to-env-action@v1.8
         with:
           secrets: "${{ toJSON(secrets) }}"
 
@@ -94,7 +93,7 @@ jobs:
     needs: molecule
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 

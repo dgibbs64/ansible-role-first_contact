@@ -130,3 +130,8 @@
       when:
         - first_contact_remove_initial_fallback_user
         - first_contact_initial_fallback_user != first_contact_deploy_user
+
+  rescue:
+    - name: "Fail configure ansible deploy user on first contact"
+      ansible.builtin.fail:
+        msg: "Failed to configure ansible deploy user on first contact: {{ first_contact_deploy_user }}"

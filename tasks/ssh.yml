@@ -16,6 +16,11 @@
       delegate_to: localhost
       when: first_contact_has_entry_in_known_hosts_file.rc != 0
 
+  rescue:
+    - name: "Fail bypass host key check"
+      ansible.builtin.fail:
+        msg: "Bypass host key check failed for host: {{ inventory_hostname }}"
+
 - name: "Bypass host identification check"
   when: first_contact_ssh_bypass_host_identity_check
   block:

@@ -1,9 +1,69 @@
 ---
 # First contact is for hosts that require the deploy user setup.
+- name: "SSH key check"
+  ansible.builtin.include_tasks: ssh_key_check.yml
+
 - name: "Test connection for root user"
-  remote_user: "root"
-  ansible.builtin.wait_for_connection:
-    timeout: "{{ first_contact_ssh_connection_timeout }}"
+  block:
+    - name: "Test connection for root user"
+      remote_user: "root"
+      ansible.builtin.wait_for_connection:
+        timeout: "{{ first_contact_ssh_connection_timeout }}"
+
+  rescue:
+    - name: "Test connection for initial fallback user: {{ first_contact_initial_fallback_user }}"
+      remote_user: "{{ first_contact_initial_fallback_user }}"
+      ansible.builtin.wait_for_connection:
+        timeout: "{{ first_contact_ssh_connection_timeout }}"
+
+    - name: "Ensure root SSH directory exists"
+      remote_user: "{{ first_contact_initial_fallback_user }}"
+      become: true
+      ansible.builtin.file:
+        path: "/root/.ssh"
+        state: directory
+        mode: "0700"
+
+    - name: "Ensure SSH public key is on host: root"
+      remote_user: "{{ first_contact_initial_fallback_user }}"
+      become: true
+      ansible.posix.authorized_key:
+        user: "root"
+        state: present
+        key: "{{ lookup('file', '{{ first_contact_ssh_public_key_file }}') }}"
+      when: ssh_public_key_file_stat.stat.exists
+
+    - name: "Ensure SSH root login is enabled"
+      remote_user: "{{ first_contact_initial_fallback_user }}"
+      become: true
+      ansible.builtin.lineinfile:
+        path: "/etc/ssh/sshd_config"
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin yes"
+        state: present
+        validate: "sshd -t -f %s"
+      notify:
+        - "Restart sshd service"
+        - "Restart sshd service (Ubuntu 24.04)"
+
+    - name: "Ensure root user login is enabled"
+      remote_user: "{{ first_contact_initial_fallback_user }}"
+      become: true
+      ansible.builtin.user:
+        name: "root"
+        shell: "{{ first_contact_root_shell }}"
+        state: present
+      notify:
+        - "Restart sshd service"
+        - "Restart sshd service (Ubuntu 24.04)"
+
+    - name: "Flush handlers so root SSH is immediately available"
+      ansible.builtin.meta: flush_handlers
+
+    - name: "Retest connection for root user"
+      remote_user: "root"
+      ansible.builtin.wait_for_connection:
+        timeout: "{{ first_contact_ssh_connection_timeout }}"
 
 - name: "Bootstrap"
   remote_user: "root"
@@ -61,6 +121,15 @@
         line: "#includedir /etc/sudoers.d"
         state: present
         validate: "/usr/sbin/visudo -cf %s"
+
+    - name: "Remove initial fallback user"
+      ansible.builtin.user:
+        name: "{{ first_contact_initial_fallback_user }}"
+        state: absent
+        remove: true
+      when:
+        - first_contact_remove_initial_fallback_user
+        - first_contact_initial_fallback_user != first_contact_deploy_user
 
   rescue:
     - name: "Fail configure ansible deploy user on first contact"

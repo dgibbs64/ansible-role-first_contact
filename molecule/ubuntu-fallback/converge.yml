@@ -1,0 +1,10 @@
+---
+- name: "Converge"
+  hosts: all
+  vars:
+    first_contact_deploy_user: "ansible"
+    first_contact_salt: "usersalt"
+    first_contact_initial_fallback_user: "ubuntu"
+    first_contact_remove_initial_fallback_user: true
+  roles:
+    - role: "dgibbs64.first_contact"

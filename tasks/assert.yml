@@ -54,3 +54,18 @@
       - first_contact_ssh_public_key_file is defined
       - first_contact_ssh_public_key_file is string
     quiet: true
+
+- name: "Test if first_contact_initial_fallback_user is set correctly"
+  ansible.builtin.assert:
+    that:
+      - first_contact_initial_fallback_user is defined
+      - first_contact_initial_fallback_user is string
+      - (first_contact_initial_fallback_user | length) > 0
+    quiet: true
+
+- name: "Test if first_contact_remove_initial_fallback_user is set correctly"
+  ansible.builtin.assert:
+    that:
+      - first_contact_remove_initial_fallback_user is defined
+      - first_contact_remove_initial_fallback_user is boolean
+    quiet: true

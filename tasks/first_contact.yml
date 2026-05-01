@@ -135,3 +135,8 @@
     - name: "Fail configure ansible deploy user on first contact"
       ansible.builtin.fail:
         msg: "Failed to configure ansible deploy user on first contact: {{ first_contact_deploy_user }}"
+
+- name: "Update ansible_user to deploy user"
+  ansible.builtin.set_fact:
+    ansible_user: "{{ first_contact_deploy_user }}"
+  when: (ansible_user | default('root')) != first_contact_deploy_user

@@ -3,6 +3,7 @@
   hosts: all
   gather_facts: false
   vars:
+    ansible_user: ansible
     first_contact_deploy_user: "ansible"
     first_contact_ssh_connection_timeout: 3
   tasks:

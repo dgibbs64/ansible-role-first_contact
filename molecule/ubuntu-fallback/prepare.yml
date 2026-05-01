@@ -2,6 +2,10 @@
 - name: "Prepare"
   hosts: all
   gather_facts: true
+  vars:
+    ansible_connection: docker
+    ansible_host: "{{ inventory_hostname }}"
+    ansible_user: root
 
   tasks:
     - name: "Install SSH (apt)"

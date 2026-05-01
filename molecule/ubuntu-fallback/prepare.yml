@@ -92,31 +92,29 @@
         state: present
         validate: "sshd -t -f %s"
 
-    - name: "Start ssh.socket on Ubuntu 24.04"
+    - name: "Disable SSH socket activation (unreliable in Docker containers)"
       become: true
-      ansible.builtin.service:
+      ansible.builtin.systemd:
         name: ssh.socket
-        state: started
-        enabled: true
-
-    - name: "Start sshd service"
-      become: true
-      ansible.builtin.service:
-        name: sshd
-        state: started
-        enabled: true
+        state: stopped
+        enabled: false
       failed_when: false
 
-    - name: "Restart ssh service if available"
+    - name: "Start SSH service as persistent daemon"
       become: true
-      ansible.builtin.service:
-        name: ssh
-        state: restarted
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        state: started
+        enabled: true
+        daemon_reload: true
       failed_when: false
+      loop:
+        - ssh
+        - sshd
 
     - name: "Wait for sshd to be accepting connections on published port"
       ansible.builtin.wait_for:
         host: "127.0.0.1"
         port: 2222
-        timeout: 30
+        timeout: 60
       delegate_to: localhost

@@ -17,7 +17,7 @@ provisioner:
   inventory:
     host_vars:
       all:
-        ansible_user: root
+        ansible_user: ubuntu
         ansible_remote_tmp: /tmp/.ansible/tmp
 verifier:
   name: ansible

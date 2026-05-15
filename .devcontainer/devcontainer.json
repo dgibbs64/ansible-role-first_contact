@@ -12,7 +12,8 @@
     "ghcr.io/devcontainers-extra/features/markdownlint-cli:1": {},
     "ghcr.io/devcontainers-extra/features/shellcheck:1": {},
     "ghcr.io/devcontainers-extra/features/yamllint:2": {},
-    "ghcr.io/devcontainers/features/github-cli:1": {}
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers-extra/features/act:1": {}
   },
   "remoteEnv": {
     "PATH": "${containerEnv:PATH}:/home/vscode/.local/bin"
@@ -32,5 +33,5 @@
       ]
     }
   },
-  "postCreateCommand": "npm init -y >/dev/null 2>&1 || true && npm install --no-save prettier prettier-plugin-sh prettier-plugin-jinja-template && python3 -m pip install --user --break-system-packages molecule molecule-plugins[docker] jmespath passlib ansible-lint"
+  "postCreateCommand": "npm init -y >/dev/null 2>&1 || true && npm install --no-save prettier prettier-plugin-sh prettier-plugin-jinja-template && sudo apt-get update && sudo apt-get install -y ripgrep && python3 -m pip install --user --break-system-packages molecule molecule-plugins[docker] jmespath passlib ansible-lint"
 }

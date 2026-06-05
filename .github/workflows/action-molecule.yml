@@ -53,7 +53,6 @@ jobs:
           - rockylinux9
           - rockylinux10
           - ubuntu2204
-          - ubuntu2404
           - ubuntu2604
         ansible_core_version:
           - 2.16
@@ -70,11 +69,11 @@ jobs:
           persist-credentials: false
 
       - name: Install test dependencies (specific version)
-        run: pip3 install ansible-core==${{ matrix.ansible_core_version }} molecule-plugins[docker] jmespath passlib
+        run: pip3 install ansible-core==${{ matrix.ansible_core_version }} molecule-plugins[docker] jmespath
         if: matrix.ansible_core_version != 'latest'
 
       - name: Install test dependencies (latest version)
-        run: pip3 install ansible-core molecule-plugins[docker] jmespath passlib
+        run: pip3 install ansible-core molecule-plugins[docker] jmespath
         if: matrix.ansible_core_version == 'latest'
 
       - name: Secrets to env
@@ -82,24 +81,9 @@ jobs:
         with:
           secrets: "${{ toJSON(secrets) }}"
 
-      - name: Run Molecule default scenario
-        run: molecule test -s default
+      - name: Run Molecule tests
+        run: molecule test --all
         env:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"
           MOLECULE_IMAGE: "${{ matrix.distro }}"
-
-      - name: Run Molecule root-lockdown scenario
-        run: molecule test -s root-lockdown
-        env:
-          PY_COLORS: "1"
-          ANSIBLE_FORCE_COLOR: "1"
-          MOLECULE_IMAGE: "${{ matrix.distro }}"
-
-      - name: Run Molecule Ubuntu fallback scenario
-        if: matrix.distro == 'ubuntu2404'
-        run: molecule test -s ubuntu-fallback
-        env:
-          PY_COLORS: "1"
-          ANSIBLE_FORCE_COLOR: "1"
-          MOLECULE_IMAGE: "ubuntu2404"

@@ -1,12 +1,12 @@
 ---
 - name: "Test connection"
   block:
-    - name: "Test connection for ansible deploy user: {{ first_contact_deploy_user }}"
+    - name: "Test connection for ansible deploy user (initial check): {{ first_contact_deploy_user }}"
       remote_user: "{{ first_contact_deploy_user }}"
       ansible.builtin.wait_for_connection:
         timeout: "{{ first_contact_ssh_connection_timeout }}"
 
-    - name: "Test sudo access for ansible deploy: {{ first_contact_deploy_user }}"
+    - name: "Test sudo access for ansible deploy user (initial check): {{ first_contact_deploy_user }}"
       ansible.builtin.raw: sudo -n id -u
       changed_when: false
       register: deploy_user_sudo_check
@@ -17,7 +17,7 @@
           'PAM account management error' in (deploy_user_sudo_check.stderr | default(''))
         )
 
-    - name: "Notice sudo PAM limitation in container"
+    - name: "Notice sudo PAM limitation in container (initial check)"
       ansible.builtin.debug:
         msg: "Skipping sudo-dependent checks due to container PAM limitation"
       when:
@@ -35,12 +35,12 @@
 
 - name: "Test first_contact_deploy_user is accessible"
   block:
-    - name: "Test connection for ansible deploy user: {{ first_contact_deploy_user }}"
+    - name: "Test connection for ansible deploy user (post-configuration check): {{ first_contact_deploy_user }}"
       remote_user: "{{ first_contact_deploy_user }}"
       ansible.builtin.wait_for_connection:
         timeout: "{{ first_contact_ssh_connection_timeout }}"
 
-    - name: "Test sudo access for ansible deploy: {{ first_contact_deploy_user }}"
+    - name: "Test sudo access for ansible deploy user (post-configuration check): {{ first_contact_deploy_user }}"
       ansible.builtin.raw: sudo -n id -u
       changed_when: false
       register: deploy_user_sudo_check
@@ -51,7 +51,7 @@
           'PAM account management error' in (deploy_user_sudo_check.stderr | default(''))
         )
 
-    - name: "Notice sudo PAM limitation in container"
+    - name: "Notice sudo PAM limitation in container (post-configuration check)"
       ansible.builtin.debug:
         msg: "Skipping sudo-dependent checks due to container PAM limitation"
       when:

@@ -11,7 +11,7 @@ An [Ansible](https://www.ansible.com) role that on first contact with a host wil
 <a href="https://app.codacy.com/gh/dgibbs64/ansible-role-first_contact"><img src="https://img.shields.io/codacy/grade/1a892d499efd4dabb73beffa8d64ed01?logo=codacy&style=flat-square" alt="Codacy grade"></a>
 <a href="https://github.com/dgibbs64/ansible-role-first_contact/actions/workflows/action-molecule.yml"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/dgibbs64/ansible-role-first_contact/action-molecule.yml?label=molecule&logo=ansible&style=flat-square"></a>
 <a href="https://galaxy.ansible.com/dgibbs64/first_contact"><img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/v/tag/dgibbs64/ansible-role-first_contact?color=EE0000&label=release&logo=ansible&style=flat-square"></a>
-<a href="https://github.com/dgibbs64/ansible-role-first_contact/blob/main/LICENSE.md"><img src="https://img.shields.io/github/license/gameservermanagers/docker-steamcmd?style=flat-square" alt="MIT License"></a>
+<a href="https://github.com/dgibbs64/ansible-role-first_contact/blob/main/LICENSE.md"><img src="https://img.shields.io/github/license/dgibbs64/ansible-role-first_contact?style=flat-square" alt="MIT License"></a>
 </p>
 
 ## About
@@ -71,7 +71,6 @@ The following distribution families and versions are currently supported and tes
 ## Role Variables
 
 ```yaml
----
 ---
 # defaults file for first_contact
 

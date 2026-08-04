@@ -1,9 +1,9 @@
 ---
 # First contact is for hosts that require the deploy user setup.
-- name: "SSH key check"
+- name: "Initial SSH key check"
   ansible.builtin.include_tasks: ssh_key_check.yml
 
-- name: "Test connection for root user"
+- name: "Attempt connection as root, falling back to initial user if unreachable"
   block:
     - name: "Test connection for root user"
       remote_user: "root"
@@ -30,7 +30,7 @@
       ansible.posix.authorized_key:
         user: "root"
         state: present
-        key: "{{ lookup('file', '{{ first_contact_ssh_public_key_file }}') }}"
+        key: "{{ lookup('file', first_contact_ssh_public_key_file) }}"
       when: ssh_public_key_file_stat.stat.exists
 
     - name: "Ensure SSH root login is enabled"
@@ -83,7 +83,7 @@
 - name: "Configure ansible deploy user: {{ first_contact_deploy_user }}"
   remote_user: "root"
   block:
-    - name: "SSH key check"
+    - name: "SSH key check for ansible deploy user"
       ansible.builtin.include_tasks: ssh_key_check.yml
 
     - name: "Generate a random password: {{ first_contact_deploy_user }}"
@@ -103,7 +103,7 @@
       ansible.posix.authorized_key:
         user: "{{ first_contact_deploy_user }}"
         state: present
-        key: "{{ lookup('file', '{{ first_contact_ssh_public_key_file }}') }}"
+        key: "{{ lookup('file', first_contact_ssh_public_key_file) }}"
       when: ssh_public_key_file_stat.stat.exists
 
     - name: "Ensure ansible deploy user is added to sudoers: {{ first_contact_deploy_user }}"

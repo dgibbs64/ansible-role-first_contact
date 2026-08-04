@@ -20,7 +20,7 @@
   ansible.posix.authorized_key:
     user: "root"
     state: present
-    key: "{{ lookup('file', '{{ first_contact_ssh_public_key_file }}') }}"
+    key: "{{ lookup('file', first_contact_ssh_public_key_file) }}"
   register: ssh_key_copied
   when: ssh_public_key_file_stat.stat.exists and first_contact_root_add_ssh_key is true
 

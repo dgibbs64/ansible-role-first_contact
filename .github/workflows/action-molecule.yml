@@ -53,14 +53,13 @@ jobs:
           - rockylinux9
           - rockylinux10
           - ubuntu2204
+          - ubuntu2404
           - ubuntu2604
         ansible_core_version:
           - 2.16
           - latest
         exclude:
           - distro: rockylinux8
-            ansible_core_version: latest
-          - distro: opensuseleap15
             ansible_core_version: latest
     steps:
       - name: Checkout
